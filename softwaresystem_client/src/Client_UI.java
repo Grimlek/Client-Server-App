@@ -1,17 +1,10 @@
 import java.awt.Color;
-import java.awt.Menu;
-import java.awt.MenuBar;
-
-import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.ListModel;
-import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 
 import net.miginfocom.swing.MigLayout;
@@ -88,7 +81,8 @@ public class Client_UI {
 		CustomerPanel (){
 			
 			setLayout (new MigLayout ());
-			setBackground (Color.WHITE);
+			
+			
 
 			
 			
@@ -135,12 +129,15 @@ public class Client_UI {
 	
 	public static void main (String[] args){
 		
-		 SwingUtilities.invokeLater (new Runnable () {
-		      public void run () {
-		        new Client_UI ();
-		      }
-		    });
-		  }
+
+		        
+		        Client_Controller client = new Client_Controller();
+		        
+		        client.sendMessage("Server are you connected?");
+		        String input = client.receiveMessage();
+		        System.out.println(input);
+		        
+	}
 
 	}
 	
