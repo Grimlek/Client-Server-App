@@ -1,4 +1,6 @@
 import java.awt.Color;
+import java.io.IOException;
+
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -127,18 +129,30 @@ public class Client_UI {
 		
 	}
 	
-	public static void main (String[] args){
+	public static void main (String[] args) {
 		
 
-		        
-		        Client_Controller client = new Client_Controller();
-		        
-		        client.sendMessage("Server are you connected?");
-		        String input = client.receiveMessage();
-		        System.out.println(input);
-		        
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				new Client_UI();
+
+				Client_Controller client = new Client_Controller();
+
+				try {
+					client.sendMessage("Server are you connected?");
+				} catch (IOException e) {
+					
+					e.printStackTrace();
+				}
+				String input = client.receiveMessage();
+				System.out.println(input);
+
+			}
+		});
 	}
 
-	}
+}
+
+	
 	
 

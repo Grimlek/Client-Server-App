@@ -52,15 +52,15 @@ public class Server_Controller {
 		}
 	}
 	
-	public void sendMessage(String message){
-		
+	public void sendMessage(String message) throws IOException {
+
 		try {
 			out.writeUTF(message);
-			out.flush();
-		} catch (IOException e) {
-			System.out.println("Error sending message to client!");
 		}
-		
+
+		finally {
+			out.flush();
+		}
 	}
 	
 	public String receiveMessage(){
@@ -77,18 +77,28 @@ public class Server_Controller {
 		return input;
 	}
 	
-	public void closeConnection() {
+	public void closeConnection() throws IOException {
 
 		try {
 			out.close();
-			in.close();
-			socket.close();
-		} catch (IOException ex) {
-			System.out.println("Error closing the socket and streams");
 		}
 
-	}  
+		finally {
+			try {
+				in.close();
+			}
+
+			finally {
+				socket.close();
+			}
+		}
+
+	}
+}
+
+		
+
+
 
 	
 
-}

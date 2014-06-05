@@ -4,26 +4,25 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-
 public class Client_Controller {
 
 	private String SERVER_HOSTNAME;
 	private int SERVER_PORT = 20001;
-	
+
 	private DataOutputStream out;
 	private DataInputStream in;
 	private Socket socket;
-	
-	Client_Controller(){
-		
+
+	Client_Controller() {
+
 		this.connect(SERVER_HOSTNAME, SERVER_PORT);
 		this.outputStream();
 		this.inputStream();
-		
+
 	}
-	
-	private void connect(String hostName, int port){
-		
+
+	private void connect(String hostName, int port) {
+
 		try {
 			socket = new Socket(hostName, port);
 		} catch (UnknownHostException ex) {
@@ -31,66 +30,76 @@ public class Client_Controller {
 		} catch (IOException ex) {
 			System.out.println("Error in connecting to server: " + port);
 		}
-		
+
 	}
-	
-	private void outputStream(){
-		
+
+	private void outputStream() {
+
 		try {
 			out = new DataOutputStream(socket.getOutputStream());
 		} catch (IOException ex) {
 			System.out.println("Output stream failure");
 		}
-		
-		
+
 	}
-	
-	private void inputStream(){
-		
+
+	private void inputStream() {
+
 		try {
 			in = new DataInputStream(socket.getInputStream());
 		} catch (IOException ex) {
 			System.out.println("Input stream failure");
 		}
-		
-	}
-	
-	public void closeConnection() {
 
-		this.sendMessage("Client_Close");
+	}
+
+	public void closeConnection() throws IOException {
+
 		try {
-			out.close();
-			in.close();
-			socket.close();
-		} catch (IOException ex) {
-			System.out.println("Error closing the socket and streams");
+			this.sendMessage("Client_Close");
 		}
 
+		finally {
+
+			try {
+				out.close();
+			}
+
+			finally {
+				try {
+					in.close();
+				}
+
+				finally {
+					socket.close();
+				}
+			}
+		}
 	}
-	
-	public void sendMessage(String message){
-		
+
+	public void sendMessage(String message) throws IOException {
+
 		try {
 			out.writeUTF(message);
-			out.flush();
-		} catch (IOException ex) {
-			System.out.println("Error sending the message to the server");
 		}
-		
-		
+
+		finally {
+			out.flush();
+		}
+
 	}
-	
-	public String receiveMessage(){
-		
+
+	public String receiveMessage() {
+
 		String input = null;
-		
+
 		try {
 			input = in.readUTF();
 		} catch (IOException ex) {
 			System.out.println("Error receving the message from the server");
 		}
-		
+
 		return input;
-		
+
 	}
 }

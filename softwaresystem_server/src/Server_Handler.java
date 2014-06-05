@@ -1,6 +1,8 @@
+import java.io.IOException;
+
 public class Server_Handler {
 
-	public static void main (String[] args){
+	public static void main (String[] args) throws IOException{
 		
 			Server_Controller server = new Server_Controller();
 			

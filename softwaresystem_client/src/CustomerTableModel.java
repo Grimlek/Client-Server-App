@@ -7,11 +7,11 @@ import javax.swing.table.AbstractTableModel;
 public class CustomerTableModel extends AbstractTableModel{
 
 	private ArrayList<String []> custList;
-	private String [] columnNames = {"First Name", "Last Name", "Address", "Phone"};
+	private String [] columnNames = {"ID", "First Name", "Last Name", "Address", "Phone"};
 	
 	CustomerTableModel(){
 		
-		custList = new ArrayList<String []>();
+		this.custList = new ArrayList<String []>();
 		
 	}
 
