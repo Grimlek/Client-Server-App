@@ -7,7 +7,7 @@ import java.net.UnknownHostException;
 public class Client_Controller {
 
 	private String SERVER_HOSTNAME;
-	private int SERVER_PORT = 20001;
+	private int SERVER_PORT = 20999;
 
 	private DataOutputStream out;
 	private DataInputStream in;

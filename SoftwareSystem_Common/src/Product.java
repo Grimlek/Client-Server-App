@@ -5,6 +5,7 @@ public class Product {
 	private String description;
 	private double price;
 	
+	
 	Product (String productName, String description, Double price){
 		
 		this.id = 0;
@@ -20,6 +21,7 @@ public class Product {
 		this.setDescription(description);
 		this.setPrice(price);
 	}
+	
 
 	public int getId() {
 		return id;

@@ -1,33 +1,42 @@
 
-abstract class Person {
+public abstract class Person {
+	
 	
 	protected String firstName;
 	protected String lastName;
 	protected String address;
 	protected String phoneNum;
 	
-	private String getFirstName() {
+	
+	public String getFirstName() {
 		return firstName;
 	}
-	private void setFirstName(String firstName) {
+	
+	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
-	private String getLastName() {
+	
+	public String getLastName() {
 		return lastName;
 	}
-	private void setLastName(String lastName) {
+	
+	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
-	private String getAddress() {
+	
+	public String getAddress() {
 		return address;
 	}
-	private void setAddress(String address) {
+	
+	public void setAddress(String address) {
 		this.address = address;
 	}
-	private String getPhoneNum() {
+	
+	public String getPhoneNum() {
 		return phoneNum;
 	}
-	private void setPhoneNum(String phoneNum) {
+	
+	public void setPhoneNum(String phoneNum) {
 		this.phoneNum = phoneNum;
 	}
 	
