@@ -1,6 +1,7 @@
 package client;
+
 import java.awt.Color;
-import java.io.IOException;
+
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -92,7 +93,6 @@ public class Client_UI extends JFrame{
 	private class CustomerPanel extends JPanel{
 		
 		private JLabel lblCust;
-		private String input;
 		private Customer_Table_Model ctm;
 		private JScrollPane scroll;
 		private JTable table;;

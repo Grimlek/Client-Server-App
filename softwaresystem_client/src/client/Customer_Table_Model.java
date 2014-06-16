@@ -1,6 +1,5 @@
 package client;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import common.Customer;
 
@@ -9,7 +8,7 @@ import javax.swing.table.AbstractTableModel;
 @SuppressWarnings("serial")
 public class Customer_Table_Model extends AbstractTableModel{
 
-	private ArrayList<String []> custList = new ArrayList();
+	private ArrayList<String []> custList = new ArrayList<String[]>();
 	private String [] columnNames = {"ID", "First Name", "Last Name", "Address", "Phone"};
 	
 	Customer_Table_Model(ArrayList<Customer> customers){
@@ -21,6 +20,11 @@ public class Customer_Table_Model extends AbstractTableModel{
 	@Override
 	public int getColumnCount() {
 		return columnNames.length;
+	}
+	
+	@Override
+	public String getColumnName(int column) {	
+		return columnNames[column];
 	}
 
 	@Override
@@ -36,8 +40,6 @@ public class Customer_Table_Model extends AbstractTableModel{
 	private void getTableData(ArrayList<Customer> customers){
 		
 		for (Customer c : customers){
-			
-			System.out.println(String.valueOf(customers.size()));
 			
 			String [] objects = new String[columnNames.length];
 			
