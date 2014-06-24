@@ -37,7 +37,6 @@ public class ClientName_Handler extends Client_Handler{
 		switch (input) {
 
 		case ("Get_Customer_Data"):
-			System.out.println("View Customer Has Been Initialized");
 			ArrayList<Customer> customers = new ArrayList<>();
 			customers.add(new Customer(35, "adam", "john", "aaaa", "pppp"));
 			customers.add(new Customer(35, "dan", "jo", "ccc", "yyyy"));
@@ -45,9 +44,30 @@ public class ClientName_Handler extends Client_Handler{
 			customers.add(new Customer(35, "rocky", "jon", "llll", "tttt"));
 			outObj.writeObject(customers);
 			break;
-
+			
+		case ("Get_Product_Data"):
+			
+			break;
+		
+		case ("Add_Customer"):
+			break;
+		
+		case ("Add_Product"):
+			break;
+		
+		case ("Remove_Customer"):
+			break;
+		
+		case ("Remove_Product"):
+			break;
+		
+		case ("Edit_Customer"):
+			break;
+		
+		case ("Edit_Produt"):
+			break;
+		
 		}
-		out.writeUTF("Yes I am connected!!!!");
 		out.flush();
 		socket.shutdownOutput();
 
