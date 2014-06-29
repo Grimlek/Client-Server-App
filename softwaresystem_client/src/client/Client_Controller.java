@@ -9,8 +9,8 @@ import java.net.UnknownHostException;
 
 public class Client_Controller {
 
-	private String SERVER_HOSTNAME;
-	private int SERVER_PORT = 20999;
+	private String hostName = "localhost";
+	private int port = 20999;
 
 	private DataOutputStream out;
 	private DataInputStream in;
@@ -20,7 +20,7 @@ public class Client_Controller {
 
 	Client_Controller() {
 
-		this.connect(SERVER_HOSTNAME, SERVER_PORT);
+		this.connect(hostName, port);
 		this.outputStream();
 		this.inputStream();
 
@@ -34,6 +34,7 @@ public class Client_Controller {
 			System.out.println("Host was not found: " + hostName);
 		} catch (IOException ex) {
 			System.out.println("Error in connecting to server: " + port);
+			ex.printStackTrace();
 		}
 
 	}
@@ -116,7 +117,8 @@ public class Client_Controller {
 		
 		try {
 			sendMessage(message);
-			input = inObj.readObject();			
+			input = inObj.readObject();		
+			System.out.println(input);
 		} catch (IOException | ClassNotFoundException ex) {
 			System.out.println("Error receving the message from the server");
 		}

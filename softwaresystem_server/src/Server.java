@@ -4,32 +4,42 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
 
 public final class Server implements Closeable {
 
 	private final ServerSocket serverSocket;
 	private final Client_Handler_Factory handlerFactory;
+	private final ExecutorService executor;
 
 	private volatile boolean listening, closed;
 
-	public Server(int port, Client_Handler_Factory handlerFactory)
-			throws IOException {
+	public Server(int port, 
+			Client_Handler_Factory handlerFactory, 
+			ExecutorService executor) throws IOException {
 		Objects.requireNonNull(port);
+		Objects.requireNonNull(executor);
 
 		this.serverSocket = new ServerSocket(port);
 		this.handlerFactory = handlerFactory;
-
+		this.executor = executor;
 	}
 
-	public void start() throws IOException {
+	public void start() {
 
-		/**
-		 * Add run method here for multi-threaded app and include the listen()
-		 * method within
-		 * 
-		 * @future implementation
-		 */
-		listen();
+		executor.submit(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					listen();
+				}
+
+				catch (IOException ex) {
+					System.out.println("An exception occurred while the server was listening");
+							ex.printStackTrace();
+				}
+			}
+		});
 
 	}
 
@@ -48,8 +58,19 @@ public final class Server implements Closeable {
 
 		try {
 			while (!closed) {
-				Socket socket = serverSocket.accept();
-				delegateToHandler(socket);
+				final Socket socket = serverSocket.accept();
+				
+				System.out.println(socket);
+				
+				executor.submit(new Runnable()  {
+					
+					public void run (){
+					
+						delegateToHandler(socket);
+						
+					}
+					
+				});
 			}
 		}
 
@@ -63,12 +84,11 @@ public final class Server implements Closeable {
 	}
 
 	private void delegateToHandler(Socket socket) {
-
+		
 		try {
 			handlerFactory.createHandler(socket).handle();
 		} catch (IOException ex) {
-			System.out
-					.println("Exception occured while handling the connection to "
+			System.out.println("Exception occured while handling the connection to "
 							+ socket.getInetAddress());
 		}
 
@@ -79,15 +99,13 @@ public final class Server implements Closeable {
 
 			} catch (IOException ex) {
 
-				System.out
-						.println("Exception occured while trying to close the connection to "
+				System.out.println("Exception occured while trying to close the connection to "
 								+ socket.getInetAddress());
 
 			}
 		}
 	}
 
-	@Override
 	public void close() throws IOException {
 
 		if (!closed) {
