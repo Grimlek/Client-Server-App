@@ -117,8 +117,7 @@ public class Client_Controller {
 		
 		try {
 			sendMessage(message);
-			input = inObj.readObject();		
-			System.out.println(input);
+			input = inObj.readObject();
 		} catch (IOException | ClassNotFoundException ex) {
 			System.out.println("Error receving the message from the server");
 		}

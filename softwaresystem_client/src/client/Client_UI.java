@@ -1,6 +1,5 @@
 package client;
 
-import java.awt.Color;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -127,7 +126,7 @@ public class Client_UI extends JFrame {
 	private class ProductPanel extends JPanel {
 
 		private JLabel lblProd;
-		private Product_Table_Model ctm;
+		private Product_Table_Model ptm;
 		private JScrollPane scroll;
 		private JTable table;
 
@@ -135,9 +134,7 @@ public class Client_UI extends JFrame {
 
 			setLayout(new MigLayout());
 
-			setBackground(Color.WHITE);
-
-			ctm = new Product_Table_Model(
+			ptm = new Product_Table_Model(
 					(ArrayList<Product>) client
 							.receiveObject("Get_Product_Data"));
 
@@ -149,9 +146,9 @@ public class Client_UI extends JFrame {
 
 			lblProd = new JLabel("Product List: ");
 
-			add(lblProd);
+			add(lblProd, "wrap");
 
-			table = new JTable(ctm);
+			table = new JTable(ptm);
 			table.setFillsViewportHeight(true);
 			scroll = new JScrollPane(table);
 

@@ -40,7 +40,7 @@ public class Customer_Table_Model extends AbstractTableModel{
 	private void getTableData(ArrayList<Customer> customers){
 		
 		for (Customer c : customers){
-			
+			System.out.println(c);
 			String [] objects = new String[columnNames.length];
 			
 			objects[0] = String.valueOf(c.getId());
