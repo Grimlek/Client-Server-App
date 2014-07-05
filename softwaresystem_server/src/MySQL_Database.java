@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import common.Customer;
 import common.Product;
@@ -19,23 +20,6 @@ public class MySQL_Database {
 		this.connect = DriverManager.getConnection (path + user + password);
 		
 	}
-
-	public ResultSet executeQuery (String query) {
-		
-		ResultSet resultSet;
-		
-		try {
-			resultSet = connect.createStatement().executeQuery(query);
-			
-			return resultSet;
-			
-		} catch (SQLException ex) {
-			System.out.println("Error creating query!");
-		}
-		
-		return null;	
-		
-	}
 	
 	public void removeCustomer (int id) throws SQLException {
 		
@@ -47,7 +31,7 @@ public class MySQL_Database {
 		
 	}
 	
-	public void removeProduct (int id) throws SQLException{
+	public void removeProduct (int id) throws SQLException {
 		
 		String statement = "DELETE FROM customers WHERE customerID=?";
 
@@ -99,7 +83,9 @@ public class MySQL_Database {
 		
 	}
 	
-	public Customer getCustomers () throws SQLException {
+	public ArrayList <Customer> getCustomers () throws SQLException {
+		
+		ArrayList <Customer> customerData = new ArrayList <Customer> ();
 		
 		String statement = "SELECT * FROM customers";
 		
@@ -110,15 +96,20 @@ public class MySQL_Database {
 			
 			while (resultSet.next ()) {
 				
+				customerData.add (new Customer (resultSet.getInt ("customerID"), resultSet.getString ("firstName"),
+						resultSet.getString ("lastName"), resultSet.getString ("address"), 
+						resultSet.getString ("phoneNum")));
 				
 			}
 			
 		}
 		
-		return null;
+		return customerData;
 	}
 	
-	public Product getProducts () throws SQLException {
+	public ArrayList <Product> getProducts () throws SQLException {
+		
+		ArrayList <Product> productData = new ArrayList <Product> ();
 		
 		String statement = "SELECT * FROM products";
 		
@@ -129,20 +120,22 @@ public class MySQL_Database {
 			
 			while (resultSet.next ()) {
 				
+				productData.add (new Product (resultSet.getInt ("productID"), resultSet.getString ("productName"),
+						resultSet.getString ("description"), resultSet.getDouble ("price")));
 				
 			}
 			
 		}
 		
-		return null;
+		return productData;
 	}
 	
-	public void searchCustomers (){
+	public void searchCustomers () {
 		
 		
 	}
 	
-	public void searchProducts (){
+	public void searchProducts () {
 		
 		
 	}
