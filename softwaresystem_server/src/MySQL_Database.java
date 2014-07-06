@@ -17,8 +17,7 @@ public class MySQL_Database {
 	MySQL_Database (String path, String user, String password) throws SQLException, ClassNotFoundException {
 		
 		Class.forName ("com.mysql.jdbc.Driver");
-		this.connect = DriverManager.getConnection (path + user + password);
-		
+		this.connect = DriverManager.getConnection (path + "user=" + user + "&password=" + password);
 	}
 	
 	public void removeCustomer (int id) throws SQLException {

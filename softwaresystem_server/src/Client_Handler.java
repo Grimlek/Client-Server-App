@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.net.Socket;
+import java.sql.SQLException;
 import java.util.Objects;
 
 public abstract class Client_Handler {
@@ -12,7 +13,7 @@ public abstract class Client_Handler {
 		
 	}
 	
-	public abstract void handle() throws IOException;
+	public abstract void handle() throws IOException, SQLException;
 	
 	
 }

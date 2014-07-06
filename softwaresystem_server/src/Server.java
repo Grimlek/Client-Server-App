@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.sql.SQLException;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 
@@ -35,8 +36,7 @@ public final class Server {
 				}
 
 				catch (IOException ex) {
-					System.out
-							.println("An exception occurred while the server was listening");
+					System.out.println("An exception occurred while the server was listening");
 					ex.printStackTrace();
 				}
 			}
@@ -88,9 +88,8 @@ public final class Server {
 
 		try {
 			handlerFactory.createHandler(socket).handle();
-		} catch (IOException ex) {
-			System.out
-					.println("Exception occured while handling the connection to "
+		} catch (IOException | SQLException ex) {
+			System.out.println("Exception occured while handling the connection to "
 							+ socket.getInetAddress());
 		}
 
@@ -101,8 +100,7 @@ public final class Server {
 
 			} catch (IOException ex) {
 
-				System.out
-						.println("Exception occured while trying to close the connection to "
+				System.out.println("Exception occured while trying to close the connection to "
 								+ socket.getInetAddress());
 
 			}
