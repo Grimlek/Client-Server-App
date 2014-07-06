@@ -8,7 +8,7 @@ import common.Product;
 public class Product_Table_Model extends AbstractTableModel {
 
 	private ArrayList<String[]> prodList = new ArrayList<String[]>();
-	private String[] columnNames = { "Product Name", "Description", "Price" };
+	private String[] columnNames = { "Product ID", "Product Name", "Description", "Price" };
 
 	Product_Table_Model(ArrayList<Product> products) {
 
@@ -40,10 +40,11 @@ public class Product_Table_Model extends AbstractTableModel {
 		for (Product p : products) {
 
 			String[] objects = new String[columnNames.length];
-
-			objects[0] = p.getProductName();
-			objects[1] = p.getDescription();
-			objects[2] = String.valueOf(p.getPrice());
+			
+			objects[0] = String.valueOf(p.getId());
+			objects[1] = p.getProductName();
+			objects[2] = p.getDescription();
+			objects[3] = String.valueOf(p.getPrice());
 
 			prodList.add(objects);
 
