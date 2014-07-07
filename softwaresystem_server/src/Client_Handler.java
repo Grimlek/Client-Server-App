@@ -8,12 +8,12 @@ public abstract class Client_Handler {
 	protected final Socket socket;
 	
 	protected Client_Handler (Socket socket){
-		Objects.requireNonNull(socket);
+		Objects.requireNonNull (socket);
 		this.socket = socket;
 		
 	}
 	
-	public abstract void handle() throws IOException, SQLException;
+	public abstract void handle () throws IOException, SQLException;
 	
 	
 }

@@ -16,42 +16,41 @@ public final class Server {
 
 	private volatile boolean listening, closed;
 
-	public Server(int port, Client_Handler_Factory handlerFactory,
+	public Server (int port, Client_Handler_Factory handlerFactory,
 			ExecutorService executor) throws IOException {
-		Objects.requireNonNull(port);
-		Objects.requireNonNull(executor);
+		Objects.requireNonNull (port);
+		Objects.requireNonNull (executor);
 
-		this.serverSocket = new ServerSocket(port);
+		this.serverSocket = new ServerSocket (port);
 		this.handlerFactory = handlerFactory;
 		this.executor = executor;
 	}
 
-	public void start() {
+	public void start () {
 
-		executor.submit(new Runnable() {
+		executor.submit (new Runnable () {
 			@Override
-			public void run() {
+			public void run () {
 				try {
-					listen();
+					listen ();
 				}
 
 				catch (IOException ex) {
-					System.out.println("An exception occurred while the server was listening");
-					ex.printStackTrace();
+					System.out.println ("An exception occurred while the server was listening");
+					ex.printStackTrace ();
 				}
 			}
 		});
 
 	}
 
-	public void listen() throws IOException {
+	public void listen () throws IOException {
 
 		synchronized (this) {
 
 			if (listening) {
 
-				throw new IllegalStateException(
-						"The server has already started listening");
+				throw new IllegalStateException ("The server has already started listening");
 			}
 
 			listening = true;
@@ -61,13 +60,13 @@ public final class Server {
 		try {
 			while (!closed) {
 
-				socket = serverSocket.accept();
+				socket = serverSocket.accept ();
 
-				executor.submit(new Runnable() {
+				executor.submit (new Runnable () {
 
-					public void run() {
+					public void run () {
 
-						delegateToHandler(socket);
+						delegateToHandler (socket);
 
 					}
 
@@ -77,42 +76,42 @@ public final class Server {
 
 		catch (SocketException ex) {
 			if (closed)
-				System.out.println("Socket is closed!");
+				System.out.println ("Socket is closed!");
 			else
 				throw ex;
 		}
 
 	}
 
-	private void delegateToHandler(Socket socket) {
+	private void delegateToHandler (Socket socket) {
 
 		try {
-			handlerFactory.createHandler(socket).handle();
+			handlerFactory.createHandler (socket).handle ();
 		} catch (IOException | SQLException ex) {
-			System.out.println("Exception occured while handling the connection to "
+			System.out.println ("Exception occured while handling the connection to "
 							+ socket.getInetAddress());
 		}
 
 		finally {
 			try {
 
-				socket.close();
+				socket.close ();
 
 			} catch (IOException ex) {
 
-				System.out.println("Exception occured while trying to close the connection to "
+				System.out.println ("Exception occured while trying to close the connection to "
 								+ socket.getInetAddress());
 
 			}
 		}
 	}
 
-	public void close() throws IOException {
+	public void close () throws IOException {
 
 		if (!closed) {
 			closed = true;
-			serverSocket.close();
-			executor.shutdown();
+			serverSocket.close ();
+			executor.shutdown ();
 
 		}
 	}

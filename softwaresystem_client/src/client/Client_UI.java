@@ -1,7 +1,9 @@
 package client;
 
+import java.awt.Dimension;
 import java.util.ArrayList;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -10,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 
 import common.Customer;
@@ -92,6 +95,7 @@ public class Client_UI extends JFrame {
 		private JLabel lblCust;
 		private Customer_Table_Model ctm;
 		private JScrollPane scroll;
+		private JPanel buttonPanel;
 		private JTable table;
 
 		CustomerPanel() {
@@ -126,13 +130,17 @@ public class Client_UI extends JFrame {
 	private class ProductPanel extends JPanel {
 
 		private JLabel lblProd;
+		private JButton butAdd;
+		private JButton butRemove;
+		private JButton butEdit;
 		private Product_Table_Model ptm;
 		private JScrollPane scroll;
+		private JPanel buttonPanel;
 		private JTable table;
 
 		ProductPanel() {
 
-			setLayout(new MigLayout());
+			setLayout(new MigLayout("debug"));
 
 			ptm = new Product_Table_Model(
 					(ArrayList<Product>) client
@@ -144,15 +152,28 @@ public class Client_UI extends JFrame {
 
 		public void initComponents() {
 
-			lblProd = new JLabel("Product List: ");
+			lblProd = new JLabel ("Product List: ");
+			
+			buttonPanel = new JPanel (new MigLayout());
+			butAdd = new JButton ("Add");
+			butRemove = new JButton ("Remove");
+			butEdit = new JButton ("Edit");
+			buttonPanel.add(butAdd, "cell 0 0");
+			buttonPanel.add(butRemove, "cell 0 1");
+			buttonPanel.add(butEdit, "cell 0 2");
 
+			butAdd.setPreferredSize(new Dimension(40, 50));
+			
 			add(lblProd, "wrap");
 
 			table = new JTable(ptm);
 			table.setFillsViewportHeight(true);
+			table.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 			scroll = new JScrollPane(table);
 
 			add(scroll);
+			add(buttonPanel);
+			
 
 		}
 

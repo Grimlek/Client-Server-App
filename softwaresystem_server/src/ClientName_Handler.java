@@ -21,43 +21,43 @@ public class ClientName_Handler extends Client_Handler {
 	private final ObjectOutputStream outObj;
 	private MySQL_Database database;
 
-	public ClientName_Handler(Socket socket) throws IOException {
-		super(socket);
+	public ClientName_Handler (Socket socket) throws IOException {
+		super (socket);
 		
-		this.out = new DataOutputStream(socket.getOutputStream());
-		this.in = new DataInputStream(socket.getInputStream());
-		this.outObj = new ObjectOutputStream(socket.getOutputStream());
-		this.inObj = new ObjectInputStream(socket.getInputStream());
+		this.out = new DataOutputStream (socket.getOutputStream ());
+		this.in = new DataInputStream (socket.getInputStream ());
+		this.outObj = new ObjectOutputStream (socket.getOutputStream ());
+		this.inObj = new ObjectInputStream (socket.getInputStream ());
 
 	}
 
 	@Override
-	public void handle() throws IOException, SQLException {
+	public void handle () throws IOException, SQLException {
 
 		String input;
 		
 		try {
-			database = new MySQL_Database("jdbc:mysql://localhost/software_system_db?", "root", "root");
+			database = new MySQL_Database ("jdbc:mysql://localhost/software_system_db?", "root", "root");
 		} catch (ClassNotFoundException ex) {
-			System.out.println("Error while connecting to the database!");
-			ex.printStackTrace();
+			System.out.println ("Error while connecting to the database!");
+			ex.printStackTrace ();
 		}
 		
 		do {
 			
-			input = in.readUTF();
-			System.out.println(input);
+			input = in.readUTF ();
+			System.out.println (input);
 			
 		switch (input) {
 
 		case ("Get_Customer_Data"):
-			outObj.writeObject(database.getCustomers());
-			outObj.flush();
+			outObj.writeObject (database.getCustomers ());
+			outObj.flush ();
 			break;
 
 		case ("Get_Product_Data"):
-			outObj.writeObject(database.getProducts());
-			outObj.flush();
+			outObj.writeObject (database.getProducts ());
+			outObj.flush ();
 			break;
 
 		case ("Add_Customer"):
@@ -80,26 +80,27 @@ public class ClientName_Handler extends Client_Handler {
 		
 		} 
 		
-		} while (!(input.equals("Disconnect")));
+		} while (! (input.equals ("Disconnect")));
+		
+		database.close ();
 		
 	}
 
 	public static final class Factory implements Client_Handler_Factory {
 
 		@Override
-		public Client_Handler createHandler(Socket socket) throws IOException {
-			return new ClientName_Handler(socket);
+		public Client_Handler createHandler (Socket socket) throws IOException {
+			return new ClientName_Handler (socket);
 		}
 
 	}
 
-	public static void main(String... args) throws Exception {
-		ExecutorService executor = Executors.newCachedThreadPool();
-		System.out.println("Server has started");
-		Server server = new Server(20999, new ClientName_Handler.Factory(),
-				executor);
+	public static void main (String... args) throws Exception {
+		ExecutorService executor = Executors.newCachedThreadPool ();
+		System.out.println ("Server has started");
+		Server server = new Server (20999, new ClientName_Handler.Factory (), executor);
 
-		server.start();
+		server.start ();
 
 	}
 }
