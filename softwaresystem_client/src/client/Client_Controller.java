@@ -3,7 +3,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -14,7 +13,6 @@ public class Client_Controller {
 
 	private DataOutputStream out;
 	private DataInputStream in;
-	private ObjectOutputStream outObj;
 	private ObjectInputStream inObj;
 	private Socket socket;
 
@@ -43,7 +41,6 @@ public class Client_Controller {
 
 		try {
 			out = new DataOutputStream(socket.getOutputStream());
-			outObj = new ObjectOutputStream(socket.getOutputStream());
 		} catch (IOException ex) {
 			System.out.println("Output stream failure");
 		}

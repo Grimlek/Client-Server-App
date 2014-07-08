@@ -1,6 +1,5 @@
 package client;
 
-import java.awt.Dimension;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -19,6 +18,7 @@ import common.Customer;
 import common.Product;
 import net.miginfocom.swing.MigLayout;
 
+@SuppressWarnings("serial")
 public class Client_UI extends JFrame {
 
 	private JMenuBar menuBar;
@@ -55,7 +55,6 @@ public class Client_UI extends JFrame {
 
 	}
 
-	@SuppressWarnings("serial")
 	private class TabPanel extends JTabbedPane {
 
 		TabPanel() {
@@ -67,7 +66,6 @@ public class Client_UI extends JFrame {
 
 	}
 
-	@SuppressWarnings("serial")
 	private class StartPanel extends JPanel {
 
 		private JLabel welcome;
@@ -89,22 +87,19 @@ public class Client_UI extends JFrame {
 
 	}
 
-	@SuppressWarnings("serial")
 	private class CustomerPanel extends JPanel {
 
 		private JLabel lblCust;
-		private Customer_Table_Model ctm;
+		private CustomerTableModel ctm;
 		private JScrollPane scroll;
-		private JPanel buttonPanel;
 		private JTable table;
 
 		CustomerPanel() {
 
 			setLayout(new MigLayout());
 
-			ctm = new Customer_Table_Model(
-					(ArrayList<Customer>) client
-							.receiveObject("Get_Customer_Data"));
+			ctm = new CustomerTableModel(
+					(ArrayList<Customer>) client.receiveObject("Get_Customer_Data"));
 
 			initComponents();
 
@@ -126,26 +121,23 @@ public class Client_UI extends JFrame {
 
 	}
 
-	@SuppressWarnings("serial")
 	private class ProductPanel extends JPanel {
 
 		private JLabel lblProd;
 		private JButton butAdd;
 		private JButton butRemove;
 		private JButton butEdit;
-		private Product_Table_Model ptm;
+		private ProductTableModel ptm;
 		private JScrollPane scroll;
-		private JPanel buttonPanel;
 		private JTable table;
 
 		ProductPanel() {
 
 			setLayout(new MigLayout("debug"));
 
-			ptm = new Product_Table_Model(
-					(ArrayList<Product>) client
-							.receiveObject("Get_Product_Data"));
-
+			ptm = new ProductTableModel(
+					(ArrayList<Product>) client.receiveObject("Get_Product_Data"));
+	
 			initComponents();
 
 		}
@@ -154,25 +146,22 @@ public class Client_UI extends JFrame {
 
 			lblProd = new JLabel ("Product List: ");
 			
-			buttonPanel = new JPanel (new MigLayout());
 			butAdd = new JButton ("Add");
 			butRemove = new JButton ("Remove");
 			butEdit = new JButton ("Edit");
-			buttonPanel.add(butAdd, "cell 0 0");
-			buttonPanel.add(butRemove, "cell 0 1");
-			buttonPanel.add(butEdit, "cell 0 2");
-
-			butAdd.setPreferredSize(new Dimension(40, 50));
 			
-			add(lblProd, "wrap");
 
 			table = new JTable(ptm);
 			table.setFillsViewportHeight(true);
 			table.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 			scroll = new JScrollPane(table);
 
+			
+			add(lblProd, "wrap");
 			add(scroll);
-			add(buttonPanel);
+			add(butAdd, "split 3, flowy, top, sgx");
+	        add(butRemove, "sgx");
+	        add(butEdit, "sgx");        
 			
 
 		}
