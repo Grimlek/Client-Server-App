@@ -1,31 +1,20 @@
-import java.io.DataInputStream;
-
-import common.Customer;
-import common.Product;
-
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class ClientName_Handler extends Client_Handler {
 
-	private final DataOutputStream out;
-	private final DataInputStream in;
 	private final ObjectInputStream inObj;
 	private final ObjectOutputStream outObj;
 	private MySQL_Database database;
 
 	public ClientName_Handler (Socket socket) throws IOException {
 		super (socket);
-		
-		this.out = new DataOutputStream (socket.getOutputStream ());
-		this.in = new DataInputStream (socket.getInputStream ());
+
 		this.outObj = new ObjectOutputStream (socket.getOutputStream ());
 		this.inObj = new ObjectInputStream (socket.getInputStream ());
 
@@ -45,13 +34,12 @@ public class ClientName_Handler extends Client_Handler {
 		
 		do {
 			
-			input = in.readUTF ();
-			System.out.println (input);
+			input = inObj.readUTF ();
 			
 		switch (input) {
 
 		case ("Get_Customer_Data"):
-			outObj.writeObject (database.getCustomers ());
+			outObj.writeObject (database.getCustomers ());		
 			outObj.flush ();
 			break;
 

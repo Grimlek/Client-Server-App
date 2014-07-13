@@ -21,6 +21,7 @@ import net.miginfocom.swing.MigLayout;
 @SuppressWarnings("serial")
 public class Client_UI extends JFrame {
 
+	
 	private JMenuBar menuBar;
 	private JMenu menuFile;
 	private JMenu menuAbout;

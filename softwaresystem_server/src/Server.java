@@ -1,4 +1,3 @@
-import java.io.Closeable;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -90,6 +89,8 @@ public final class Server {
 		} catch (IOException | SQLException ex) {
 			System.out.println ("Exception occured while handling the connection to "
 							+ socket.getInetAddress());
+			
+			ex.printStackTrace();
 		}
 
 		finally {

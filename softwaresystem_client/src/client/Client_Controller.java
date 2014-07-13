@@ -1,18 +1,15 @@
 package client;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 public class Client_Controller {
 
 	private String hostName = "localhost";
 	private int port = 20999;
 
-	private DataOutputStream out;
-	private DataInputStream in;
+	private ObjectOutputStream outObj;
 	private ObjectInputStream inObj;
 	private Socket socket;
 
@@ -28,32 +25,27 @@ public class Client_Controller {
 
 		try {
 			socket = new Socket(hostName, port);
-		} catch (UnknownHostException ex) {
-			System.out.println("Host was not found: " + hostName);
 		} catch (IOException ex) {
-			System.out.println("Error in connecting to server: " + port);
-			ex.printStackTrace();
-		}
-
+			System.out.println("Host was not found: " + hostName);
+		} 
 	}
 
 	private void outputStream() {
 
 		try {
-			out = new DataOutputStream(socket.getOutputStream());
+			outObj = new ObjectOutputStream(socket.getOutputStream());
 		} catch (IOException ex) {
-			System.out.println("Output stream failure");
-		}
+			System.out.println("Object output stream failure");
 
+		}
 	}
 
 	private void inputStream() {
 
 		try {
-			in = new DataInputStream(socket.getInputStream());
 			inObj = new ObjectInputStream(socket.getInputStream());
 		} catch (IOException ex) {
-			System.out.println("Input stream failure");
+			System.out.println("Object input stream failure");
 		}
 
 	}
@@ -67,12 +59,12 @@ public class Client_Controller {
 		finally {
 
 			try {
-				out.close();
+				outObj.close();
 			}
 
 			finally {
 				try {
-					in.close();
+					inObj.close();
 				}
 
 				finally {
@@ -83,28 +75,8 @@ public class Client_Controller {
 	}
 
 	public void sendMessage(String message) throws IOException {
-
-		try {
-			out.writeUTF(message);
-		}
-
-		finally {
-			out.flush();
-		}
-
-	}
-
-	public String receiveMessage() {
-
-		String input = null;
-
-		try {
-			input = in.readUTF();
-		} catch (IOException ex) {
-			System.out.println("Error receving the message from the server");
-		}
-
-		return input;
+			outObj.writeUTF(message);
+			outObj.flush();
 
 	}
 	
@@ -114,9 +86,15 @@ public class Client_Controller {
 		
 		try {
 			sendMessage(message);
+		} catch (IOException ex) {
+			System.out.println("Error sending the message to the server while trying to receive the object.");
+			ex.printStackTrace();
+		}
+		
+		try {
 			input = inObj.readObject();
 		} catch (IOException | ClassNotFoundException ex) {
-			System.out.println("Error receving the message from the server");
+			System.out.println("Error receving the object from the server ");
 		}
 
 		return input;
