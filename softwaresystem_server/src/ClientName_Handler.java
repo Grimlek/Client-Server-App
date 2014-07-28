@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import common.Customer;
+
 public class ClientName_Handler extends Client_Handler {
 
 	private final ObjectInputStream inObj;
@@ -49,21 +51,31 @@ public class ClientName_Handler extends Client_Handler {
 			break;
 
 		case ("Add_Customer"):
+			try {
+				database.addCustomer ( (Customer []) inObj.readObject ());
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace ();
+			}
 			break;
 
 		case ("Add_Product"):
+			//database.addProduct();
 			break;
 
 		case ("Remove_Customer"):
+			//database.removeCustomer(id);
 			break;
 
 		case ("Remove_Product"):
+			//database.removeProduct(id);
 			break;
 
 		case ("Edit_Customer"):
+			database.updateCustomer();
 			break;
 
 		case ("Edit_Produt"):
+			database.updateProduct();
 			break;
 		
 		} 

@@ -2,8 +2,9 @@ package common;
 
 import java.io.Serializable;
 
-public abstract class Person implements Serializable{
+public abstract class Person implements Serializable {
 	
+	private static final long serialVersionUID = -2855668934566095446L;
 	
 	protected String firstName;
 	protected String lastName;
@@ -11,38 +12,36 @@ public abstract class Person implements Serializable{
 	protected String phoneNum;
 	
 	
-	public String getFirstName() {
+	public String getFirstName () {
 		return firstName;
 	}
 	
-	public void setFirstName(String firstName) {
+	public void setFirstName (String firstName) {
 		this.firstName = firstName;
 	}
 	
-	public String getLastName() {
+	public String getLastName () {
 		return lastName;
 	}
 	
-	public void setLastName(String lastName) {
+	public void setLastName (String lastName) {
 		this.lastName = lastName;
 	}
 	
-	public String getAddress() {
+	public String getAddress () {
 		return address;
 	}
 	
-	public void setAddress(String address) {
+	public void setAddress (String address) {
 		this.address = address;
 	}
 	
-	public String getPhoneNum() {
+	public String getPhoneNum () {
 		return phoneNum;
 	}
 	
-	public void setPhoneNum(String phoneNum) {
+	public void setPhoneNum (String phoneNum) {
 		this.phoneNum = phoneNum;
 	}
 	
-	
-
 }

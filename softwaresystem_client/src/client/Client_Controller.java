@@ -80,6 +80,11 @@ public class Client_Controller {
 
 	}
 	
+	public void sendObject(Object object) throws IOException {
+		outObj.writeObject(object);
+		outObj.flush();
+	}
+	
 	public Object receiveObject(String message) {
 
 		Object input = null;

@@ -7,8 +7,8 @@ import javax.swing.table.AbstractTableModel;
 
 public class CustomerTableModel extends AbstractTableModel{
 
-	private static final long serialVersionUID = 221871541930978402L;
-	
+	private static final long serialVersionUID = 1L;
+
 	private ArrayList<String []> custList = new ArrayList<String[]>();
 	private String [] columnNames = {"ID", "First Name", "Last Name", "Address", "Phone"};
 	

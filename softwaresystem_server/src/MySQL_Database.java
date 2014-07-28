@@ -41,16 +41,15 @@ public class MySQL_Database {
 	
 	public void addCustomer (Customer [] data) throws SQLException {
 		
-        String statement = "INSERT INTO customers (customerID, firstName, lastName, address, telephoneNumber)" +
-        		" VALUES (?,?,?,?,?)";
+        String statement = "INSERT INTO customers (firstName, lastName, address, telephoneNumber)" +
+        		" VALUES (?,?,?,?)";
 
         preparedStatement = connect.prepareStatement (statement);
 
-        preparedStatement.setObject (1, data [0]);
-        preparedStatement.setObject (2, data [1]);
-        preparedStatement.setObject (3, data [2]);
-        preparedStatement.setObject (4, data [3]);
-        preparedStatement.setObject (5, data [4]);
+        preparedStatement.setObject (1, data [1]);
+        preparedStatement.setObject (2, data [2]);
+        preparedStatement.setObject (3, data [3]);
+        preparedStatement.setObject (4, data [4]);
         preparedStatement.executeUpdate ();
 		
 		

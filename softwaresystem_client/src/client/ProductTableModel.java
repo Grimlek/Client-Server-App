@@ -5,8 +5,9 @@ import javax.swing.table.AbstractTableModel;
 
 import common.Product;
 
-@SuppressWarnings("serial")
 public class ProductTableModel extends AbstractTableModel {
+
+	private static final long serialVersionUID = 1L;
 
 	private ArrayList<String[]> prodList = new ArrayList<String[]>();
 	private String[] columnNames = { "Product ID", "Product Name", "Description", "Price" };

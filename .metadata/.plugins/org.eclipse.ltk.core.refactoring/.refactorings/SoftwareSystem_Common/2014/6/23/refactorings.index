@@ -1,0 +1,13 @@
+1401664785109	Encapsulate field 'firstName'
+1401664792969	Encapsulate field 'lastName'
+1401668516720	Convert local variable 'serverSocket' to field
+1401668520673	Convert local variable 'server' to field
+1401945680689	Encapsulate field 'firstName'
+1401945724330	Encapsulate field 'lastName'
+1401945733518	Encapsulate field 'address'
+1401945744252	Encapsulate field 'phoneNum'
+1401946219433	Encapsulate field 'id'
+1401946838601	Encapsulate field 'id'
+1401946878511	Encapsulate field 'productName'
+1401946907215	Encapsulate field 'description'
+1401946920512	Encapsulate field 'price'

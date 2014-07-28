@@ -1,56 +1,39 @@
 package common;
-public class Product {
 
-	private int id;
-	private String productName;
-	private String description;
-	private double price;
-	
-	
-	Product (String productName, String description, Double price){
-		
-		this.id = 0;
-		this.setProductName(productName);
-		this.setDescription(description);
-		this.setPrice(price);	
-	}
-	
-	Product (int id, String productName, String description, Double price){
+import java.io.Serializable;
+
+public final class Product implements Serializable {
+
+	private static final long serialVersionUID = -528779561681828062L;
+
+	private final int id;
+	private final String productName;
+	private final String description;
+	private final double price;
+
+	public Product (int id, String productName, String description, Double price){
 		
 		this.id = id;
-		this.setProductName(productName);
-		this.setDescription(description);
-		this.setPrice(price);
+		this.productName = productName;
+		this.description = description;
+		this.price = price;
 	}
 	
 
-	public int getId() {
+	public int getId () {
 		return id;
 	}
 
-	public String getProductName() {
+	public String getProductName () {
 		return productName;
 	}
 
-	public void setProductName(String productName) {
-		this.productName = productName;
-	}
-
-	public String getDescription() {
+	public String getDescription () {
 		return description;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public double getPrice() {
+	public double getPrice () {
 		return price;
 	}
-
-	public void setPrice(double price) {
-		this.price = price;
-	}
-
 	
 }
