@@ -1,2 +1,0 @@
-mysql -uroot -proot
-pause
