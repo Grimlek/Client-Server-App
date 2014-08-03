@@ -1,5 +1,6 @@
-package client.gui;
+package client.gui.model;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import common.Customer;
 
@@ -12,7 +13,7 @@ public class CustomerTableModel extends AbstractTableModel{
 	private ArrayList<String []> custList = new ArrayList<String[]>();
 	private String [] columnNames = {"ID", "First Name", "Last Name", "Address", "Phone"};
 	
-	CustomerTableModel(ArrayList<Customer> customers){
+	public CustomerTableModel(ArrayList<Customer> customers){
 		
 		getTableData(customers);
 		
@@ -37,6 +38,13 @@ public class CustomerTableModel extends AbstractTableModel{
 	public Object getValueAt(int row, int column) {
 		return (custList.get(row))[column];
 	}	
+	
+	public String [] getRowValues (int row) {
+		
+		String [] rowValues = custList.get(row);
+		
+		return rowValues; 
+	}
 	
 	private void getTableData(ArrayList<Customer> customers){
 		

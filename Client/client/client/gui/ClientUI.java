@@ -1,26 +1,31 @@
 package client.gui;
 
-import java.awt.Color;
-import java.awt.Dialog;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 
 import client.connect.ClientController;
+import client.gui.dialog.AddCustomerDialog;
+import client.gui.dialog.AddProductDialog;
+import client.gui.model.CustomerTableModel;
+import client.gui.model.ProductTableModel;
 import common.Customer;
 import common.Product;
 import net.miginfocom.swing.MigLayout;
@@ -34,10 +39,10 @@ public final class ClientUI extends JFrame {
 	private JMenuBar menuBar;
 	private JMenu menuFile;
 	private JMenu menuAbout;
+	
+	private BufferedImage logo;
 
-	private JLabel lblHeader;
-
-	private JTable table;
+	private JLabel headerLab;
 
 	private JScrollPane scroll;
 
@@ -64,7 +69,7 @@ public final class ClientUI extends JFrame {
 
 		menuBar.add (menuFile);
 		menuBar.add (menuAbout);
-
+		
 		setJMenuBar (menuBar);
 		add (new TabPanel ());
 
@@ -80,8 +85,10 @@ public final class ClientUI extends JFrame {
 
 		TabPanel () {
 
+			//Remove this line 
 			addTab ("Start Page", new StartPanel ());
 			addTab ("Customer", new CustomerPanel ());
+			//Also remove this line and getSelectedRow works fine
 			addTab ("Product", new ProductPanel ());
 		}
 
@@ -92,6 +99,7 @@ public final class ClientUI extends JFrame {
 		private static final long serialVersionUID = 1L;
 
 		private JLabel welcome;
+		private JLabel picLab;
 
 		StartPanel () {
 
@@ -105,6 +113,16 @@ public final class ClientUI extends JFrame {
 		public void initComponents () {
 
 			welcome = new JLabel ("This product is currently in AlphaBeta");
+			
+			try {
+				logo = ImageIO.read (new File ("C:/Users/Charles/Desktop/Eclipse Workspace/ServerTec.png"));
+			} catch (IOException ex) {
+				System.out.println("Image didn't load!");
+			}		
+			
+			picLab = new JLabel (new ImageIcon(logo));
+			
+			add (picLab, "width 536, height 250, wrap");
 
 		}
 
@@ -115,6 +133,8 @@ public final class ClientUI extends JFrame {
 		private static final long serialVersionUID = 1L;
 
 		private final CustomerTableModel custTableModel;
+		
+		private JTable table;
 
 		CustomerPanel () {
 
@@ -130,13 +150,13 @@ public final class ClientUI extends JFrame {
 
 		private void initComponents () {
 
-			lblHeader = new JLabel ("Customer List: ");
+			headerLab = new JLabel ("Customer List: ");
 
 			butAdd = new JButton ("Add");
 			butRemove = new JButton ("Remove");
 			butEdit = new JButton ("Edit");
 			
-			butAdd.addActionListener(new ActionListener() {
+			butAdd.addActionListener (new ActionListener () {
 
 				@Override
 				public void actionPerformed (java.awt.event.ActionEvent evt) {
@@ -147,21 +167,38 @@ public final class ClientUI extends JFrame {
 				
 			});
 			
-			butRemove.addActionListener(new ActionListener() {
+			butRemove.addActionListener (new ActionListener () {
 
 				@Override
-				public void actionPerformed(java.awt.event.ActionEvent evt) {
+				public void actionPerformed (java.awt.event.ActionEvent evt) {
 					
-					System.out.println("sup");
+					String [] values = custTableModel.getRowValues(
+							table.getSelectedRow());
 					
+					JOptionPane.showConfirmDialog(null, "Are you sure that you want to remove customer?",
+							"Warning", JOptionPane.YES_NO_OPTION);
+					
+						
+						if (JOptionPane.YES_NO_OPTION == JOptionPane.YES_OPTION) {
+					
+							try {
+							
+							client.sendMessage ("Remove_Customer");
+							
+							client.sendMessage (values [0]);
+							
+							} catch (IOException ex) {
+								System.out.println("Error sending the selected customer" 
+										+ " to remove from the client to server!");
+							}		
+						}
 				}
-				
 			});
 			
-			butEdit.addActionListener(new ActionListener() {
+			butEdit.addActionListener(new ActionListener () {
 
 				@Override
-				public void actionPerformed(java.awt.event.ActionEvent evt) {
+				public void actionPerformed (java.awt.event.ActionEvent evt) {
 					
 					System.out.println("sup");
 					
@@ -169,13 +206,8 @@ public final class ClientUI extends JFrame {
 				
 			});
 
-			add (lblHeader, "wrap");
+			add (headerLab, "wrap");
 
-			/*
-			 * The line below is setting prodTableModel (A new of Instance of
-			 * ProductTableModel which extends AbstractTableModel) and passing
-			 * this instance as the parameter for a new JTable instance.
-			 */
 			table = new JTable (custTableModel);
 			table.setFillsViewportHeight (true);
 			table.getTableHeader ().setReorderingAllowed (false);
@@ -200,6 +232,8 @@ public final class ClientUI extends JFrame {
 	private class ProductPanel extends JPanel {
 
 		private static final long serialVersionUID = 1L;
+		
+		private JTable table;
 
 		private final ProductTableModel prodTableModel;
 
@@ -217,32 +251,49 @@ public final class ClientUI extends JFrame {
 
 		public void initComponents () {
 
-			lblHeader = new JLabel ("Product List: ");
+			headerLab = new JLabel ("Product List: ");
 
 			butAdd = new JButton ("Add");
 			butRemove = new JButton ("Remove");
 			butEdit = new JButton ("Edit");
 			
-			butAdd.addActionListener(new ActionListener() {
+			butAdd.addActionListener (new ActionListener () {
 
 				@Override
-				public void actionPerformed(java.awt.event.ActionEvent evt) {
+				public void actionPerformed (java.awt.event.ActionEvent evt) {
 					
-					System.out.println("sup");
+					new AddProductDialog ();
 					
 				}
 				
 			});
 
-			butRemove.addActionListener(new ActionListener() {
+			butRemove.addActionListener (new ActionListener () {
 
 				@Override
-				public void actionPerformed(java.awt.event.ActionEvent evt) {
+				public void actionPerformed (java.awt.event.ActionEvent evt) {
 					
-					System.out.println("sup");
+					String [] values = prodTableModel.getRowValues(
+							table.getSelectedRow());
 					
+					JOptionPane.showConfirmDialog(null, "Are you sure that you want to remove this product?",
+							"Warning", JOptionPane.YES_NO_OPTION);
+					
+						
+						if (JOptionPane.YES_NO_OPTION == JOptionPane.YES_OPTION) {
+					
+							try {
+							
+							client.sendMessage ("Remove_Product");
+							
+							client.sendMessage (values [0]);
+							
+							} catch (IOException ex) {
+								System.out.println("Error sending the selected product" 
+										+ " to remove from the client to server!");
+							}		
+						}
 				}
-				
 			});
 			
 			butEdit.addActionListener(new ActionListener() {
@@ -256,11 +307,6 @@ public final class ClientUI extends JFrame {
 				
 			});
 
-			/*
-			 * The line below is setting prodTableModel (A new of Instance of
-			 * ProductTableModel which extends AbstractTableModel) and passing
-			 * this instance as the parameter for a new JTable instance.
-			 */
 			table = new JTable (prodTableModel);
 			table.setFillsViewportHeight (true);
 			table.getTableHeader ().setReorderingAllowed (false);
@@ -271,7 +317,7 @@ public final class ClientUI extends JFrame {
 			table.setSelectionMode (ListSelectionModel.SINGLE_SELECTION);
 			scroll = new JScrollPane (table);
 
-			add (lblHeader, "wrap");
+			add (headerLab, "wrap");
 			add (scroll);
 			add (butAdd, "split 3, flowy, top, sgx");
 			add (butRemove, "sgx");
@@ -280,110 +326,9 @@ public final class ClientUI extends JFrame {
 		}
 
 	}
+
 	
-	public class AddCustomerDialog extends JDialog{
-		
-		private static final long serialVersionUID = 1L;
-
-		public AddCustomerDialog () {
-			
-			setTitle("");
-			setLayout (new MigLayout ("", "[100:100:200][200:200:200]"));
-			setModalExclusionType (Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
-			setLocation (600, 300);
-			initComponents ();
-			pack ();
-			setVisible (true);
-			
-		}
-		
-		
-		public void initComponents() {
-			
-			final JTextField firstNameTF;
-			final JTextField lastNameTF;
-			final JTextField addressTF;
-			final JTextField phoneNumTF;
-			
-			final JLabel firstNameLab;
-			final JLabel lastNameLab;
-			final JLabel addressLab;
-			final JLabel phoneNumLab;
-			final JLabel errorLab;
-			
-			final JButton cancelBut;
-			
-			firstNameTF = new JTextField();
-			lastNameTF = new JTextField();
-			addressTF = new JTextField();
-		    phoneNumTF = new JTextField();
-		    
-		    firstNameTF.setEditable(true);
-		    lastNameTF.setEditable(true);
-		    addressTF.setEditable(true);
-		    phoneNumTF.setEditable(true);
-		    
-		    firstNameLab = new JLabel("First Name: ");
-		    lastNameLab = new JLabel("Last Name: ");
-		    addressLab = new JLabel("Addres: ");
-		    phoneNumLab = new JLabel("Phone Number: ");
-		    errorLab = new JLabel ("All fields are required to be filled out!");
-		    
-		    butAdd = new JButton("Add");
-		    
-			butAdd.addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(java.awt.event.ActionEvent evt) {
-					
-					if ( firstNameTF.getText ().trim ().length () == 0 || lastNameTF.getText().length() == 0 || 
-							addressTF.getText().length() == 0 || phoneNumTF.getText().length() == 0) {
-					
-						errorLab.setVisible(true);
-			            
-
-			        } else {
-					
-					try {
-						client.sendMessage("Add_Customer");
-						
-						client.sendObject(new Customer (0, firstNameTF.getText().trim(), lastNameTF.getText().trim(),
-								addressTF.getText().trim(), phoneNumTF.getText().trim()));
-						
-					} catch (IOException e) {
-						System.out.println("Error sending new customer to server!");
-					}
-					
-			        }
-					
-					dispose();
-					
-				}
-				
-			});
-			
-		    cancelBut = new JButton("Cancel");	 
-		    
-		    errorLab.setForeground(Color.red);
-		    errorLab.setVisible(false);
-		    
-		    add (errorLab, "wrap");
-		    add (firstNameLab);
-		    add (firstNameTF, "width 100, wrap");
-		    add (lastNameLab);
-		    add (lastNameTF, "width 100, wrap");
-		    add (addressLab);
-		    add (addressTF, "width 100, wrap");
-		    add (phoneNumLab);
-		    add (phoneNumTF, "width 100, wrap");
-		    add (butAdd);
-		    add (cancelBut);
-		    
-		}
-
-		
-	}
-
+	
 	public static void main (String [] args) {
 
 		SwingUtilities.invokeLater (new Runnable () {

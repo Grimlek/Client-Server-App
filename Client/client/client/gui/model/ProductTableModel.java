@@ -1,4 +1,4 @@
-package client.gui;
+package client.gui.model;
 import java.util.ArrayList;
 
 import javax.swing.table.AbstractTableModel;
@@ -12,7 +12,7 @@ public class ProductTableModel extends AbstractTableModel {
 	private ArrayList<String[]> prodList = new ArrayList<String[]>();
 	private String[] columnNames = { "Product ID", "Product Name", "Description", "Price" };
 
-	ProductTableModel(ArrayList<Product> products) {
+	public ProductTableModel(ArrayList<Product> products) {
 
 		getTableData(products);
 
@@ -36,6 +36,13 @@ public class ProductTableModel extends AbstractTableModel {
 	public Object getValueAt(int row, int column) {
 		return (prodList.get(row))[column];
 	}
+	
+	public String [] getRowValues (int row) {
+		
+		String [] rowValues = prodList.get(row);
+		
+		return rowValues; 
+	}
 
 	private void getTableData(ArrayList<Product> products) {
 				
@@ -53,4 +60,5 @@ public class ProductTableModel extends AbstractTableModel {
 		}
 
 	}
+	
 }

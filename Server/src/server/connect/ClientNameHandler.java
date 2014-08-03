@@ -65,12 +65,12 @@ public class ClientNameHandler extends ClientHandler {
 			//database.addProduct();
 			break;
 
-		case ("Remove_Customer"):
-			//database.removeCustomer(id);
+		case ("Remove_Customer"):			
+			database.removeCustomer (inObj.read ());
 			break;
 
 		case ("Remove_Product"):
-			//database.removeProduct(id);
+			database.removeProduct (inObj.read ());
 			break;
 
 		case ("Edit_Customer"):
