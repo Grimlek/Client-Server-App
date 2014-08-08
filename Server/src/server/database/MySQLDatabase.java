@@ -43,7 +43,7 @@ public class MySQLDatabase {
 	
 	public void addCustomer (Customer [] data) throws SQLException {
 		
-        String statement = "INSERT INTO customers (firstName, lastName, address, telephoneNumber)" +
+        String statement = "INSERT INTO customers (firstName, lastName, address, phoneNum" +
         		" VALUES (?,?,?,?)";
 
         preparedStatement = connect.prepareStatement (statement);
@@ -72,8 +72,18 @@ public class MySQLDatabase {
 		
 	}
 	
-	public void updateCustomer () {
-		
+	public void updateCustomer (String [] value) throws SQLException {
+        String statement = "UPDATE customers SET firstName=?, lastName=?, " + 
+        		"address=?, phoneNum=? WHERE customerID =?";
+
+        preparedStatement = connect.prepareStatement (statement);
+
+        preparedStatement.setObject (1, value [1]);
+        preparedStatement.setObject (2, value [2]);
+        preparedStatement.setObject (3, value [3]);
+        preparedStatement.setObject (4, value [4]);
+        preparedStatement.setObject (5, value [0]);
+        preparedStatement.executeUpdate ();
 		
 	}
 	

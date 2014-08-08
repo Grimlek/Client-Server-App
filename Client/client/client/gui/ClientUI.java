@@ -24,6 +24,7 @@ import javax.swing.SwingUtilities;
 import client.connect.ClientController;
 import client.gui.dialog.AddCustomerDialog;
 import client.gui.dialog.AddProductDialog;
+import client.gui.dialog.EditCustomerDialog;
 import client.gui.model.CustomerTableModel;
 import client.gui.model.ProductTableModel;
 import common.Customer;
@@ -85,10 +86,8 @@ public final class ClientUI extends JFrame {
 
 		TabPanel () {
 
-			//Remove this line 
 			addTab ("Start Page", new StartPanel ());
 			addTab ("Customer", new CustomerPanel ());
-			//Also remove this line and getSelectedRow works fine
 			addTab ("Product", new ProductPanel ());
 		}
 
@@ -171,11 +170,11 @@ public final class ClientUI extends JFrame {
 
 				@Override
 				public void actionPerformed (java.awt.event.ActionEvent evt) {
+					int selectedRow = table.getSelectedRow ();
 					
-					String [] values = custTableModel.getRowValues(
-							table.getSelectedRow());
+					String [] values = custTableModel.getRowValues (selectedRow);
 					
-					JOptionPane.showConfirmDialog(null, "Are you sure that you want to remove customer?",
+					JOptionPane.showConfirmDialog (null, "Are you sure that you want to remove customer?",
 							"Warning", JOptionPane.YES_NO_OPTION);
 					
 						
@@ -187,6 +186,8 @@ public final class ClientUI extends JFrame {
 							
 							client.sendMessage (values [0]);
 							
+							custTableModel.removeRow (selectedRow);
+
 							} catch (IOException ex) {
 								System.out.println("Error sending the selected customer" 
 										+ " to remove from the client to server!");
@@ -195,13 +196,18 @@ public final class ClientUI extends JFrame {
 				}
 			});
 			
-			butEdit.addActionListener(new ActionListener () {
+			butEdit.addActionListener (new ActionListener () {
 
 				@Override
 				public void actionPerformed (java.awt.event.ActionEvent evt) {
 					
-					System.out.println("sup");
+					int selectedRow = table.getSelectedRow ();
 					
+					String [] values = custTableModel.getRowValues (selectedRow);
+					
+					EditCustomerDialog editDialog = new EditCustomerDialog (values);
+					
+					custTableModel.updateRows(selectedRow, editDialog.getChangedValues());
 				}
 				
 			});
@@ -212,8 +218,6 @@ public final class ClientUI extends JFrame {
 			table.setFillsViewportHeight (true);
 			table.getTableHeader ().setReorderingAllowed (false);
 			
-			
-			// This is setting user selection to a single interval.
 			table.setSelectionMode (ListSelectionModel.SINGLE_SELECTION);
 			scroll = new JScrollPane (table);
 			table.getColumnModel ().getColumn (3).setMinWidth (150);
@@ -273,10 +277,11 @@ public final class ClientUI extends JFrame {
 				@Override
 				public void actionPerformed (java.awt.event.ActionEvent evt) {
 					
-					String [] values = prodTableModel.getRowValues(
-							table.getSelectedRow());
+					int selectedRow = table.getSelectedRow ();
 					
-					JOptionPane.showConfirmDialog(null, "Are you sure that you want to remove this product?",
+					String [] values = prodTableModel.getRowValues (selectedRow);
+					
+					JOptionPane.showConfirmDialog (null, "Are you sure that you want to remove this product?",
 							"Warning", JOptionPane.YES_NO_OPTION);
 					
 						
@@ -288,6 +293,8 @@ public final class ClientUI extends JFrame {
 							
 							client.sendMessage (values [0]);
 							
+							prodTableModel.removeRow (selectedRow);
+							
 							} catch (IOException ex) {
 								System.out.println("Error sending the selected product" 
 										+ " to remove from the client to server!");
@@ -296,12 +303,12 @@ public final class ClientUI extends JFrame {
 				}
 			});
 			
-			butEdit.addActionListener(new ActionListener() {
+			butEdit.addActionListener (new ActionListener() {
 
 				@Override
-				public void actionPerformed(java.awt.event.ActionEvent evt) {
+				public void actionPerformed (java.awt.event.ActionEvent evt) {
 					
-					System.out.println("sup");
+					System.out.println ("sup");
 					
 				}
 				

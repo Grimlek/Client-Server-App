@@ -9,53 +9,57 @@ public class ProductTableModel extends AbstractTableModel {
 
 	private static final long serialVersionUID = 1L;
 
-	private ArrayList<String[]> prodList = new ArrayList<String[]>();
-	private String[] columnNames = { "Product ID", "Product Name", "Description", "Price" };
+	private ArrayList <String []> prodList = new ArrayList <String []> ();
+	private String [] columnNames = { "Product ID", "Product Name", "Description", "Price" };
 
-	public ProductTableModel(ArrayList<Product> products) {
+	public ProductTableModel (ArrayList <Product> products) {
 
-		getTableData(products);
+		getTableData (products);
 
 	}
 
 	@Override
-	public int getColumnCount() {
+	public int getColumnCount () {
 		return columnNames.length;
 	}
 
-	public String getColumnName(int column) {
-		return columnNames[column];
+	public String getColumnName (int column) {
+		return columnNames [column];
 	}
 
 	@Override
-	public int getRowCount() {
-		return prodList.size();
+	public int getRowCount () {
+		return prodList.size ();
 	}
 
 	@Override
-	public Object getValueAt(int row, int column) {
-		return (prodList.get(row))[column];
+	public Object getValueAt (int row, int column) {
+		return (prodList.get (row)) [column];
 	}
 	
 	public String [] getRowValues (int row) {
-		
-		String [] rowValues = prodList.get(row);
-		
+		String [] rowValues = prodList.get (row);
 		return rowValues; 
 	}
+	
+	public void removeRow (int row) {
+		
+		fireTableRowsDeleted (row, row);
+		prodList.remove (row);
+		
+	}
 
-	private void getTableData(ArrayList<Product> products) {
-				
+	private void getTableData (ArrayList <Product> products) {
 		for (Product p : products) {
 
-			String[] objects = new String[columnNames.length];
+			String [] objects = new String [columnNames.length];
 			
-			objects[0] = String.valueOf(p.getId());
-			objects[1] = p.getProductName();
-			objects[2] = p.getDescription();
-			objects[3] = String.valueOf(p.getPrice());
+			objects [0] = String.valueOf (p.getId ());
+			objects [1] = p.getProductName ();
+			objects [2] = p.getDescription ();
+			objects [3] = String.valueOf (p.getPrice ());
 
-			prodList.add(objects);
+			prodList.add (objects);
 
 		}
 

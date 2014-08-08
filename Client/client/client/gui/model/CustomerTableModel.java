@@ -1,63 +1,68 @@
 package client.gui.model;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import common.Customer;
-
 import javax.swing.table.AbstractTableModel;
 
-public class CustomerTableModel extends AbstractTableModel{
+public class CustomerTableModel extends AbstractTableModel {
 
 	private static final long serialVersionUID = 1L;
 
-	private ArrayList<String []> custList = new ArrayList<String[]>();
+	private ArrayList <String []> custList = new ArrayList <String []> ();
 	private String [] columnNames = {"ID", "First Name", "Last Name", "Address", "Phone"};
 	
-	public CustomerTableModel(ArrayList<Customer> customers){
+	public CustomerTableModel (ArrayList <Customer> customers) {
 		
-		getTableData(customers);
+		getTableData (customers);
 		
 	}
 
 	@Override
-	public int getColumnCount() {
+	public int getColumnCount () {
 		return columnNames.length;
 	}
 	
 	@Override
-	public String getColumnName(int column) {	
-		return columnNames[column];
+	public String getColumnName (int column) {	
+		return columnNames [column];
 	}
 
 	@Override
-	public int getRowCount() {
-		return custList.size();
+	public int getRowCount () {
+		return custList.size ();
 	}
 
 	@Override
-	public Object getValueAt(int row, int column) {
-		return (custList.get(row))[column];
+	public Object getValueAt (int row, int column) {
+		return (custList.get (row)) [column];
 	}	
 	
 	public String [] getRowValues (int row) {
-		
-		String [] rowValues = custList.get(row);
-		
+		String [] rowValues = custList.get (row);
 		return rowValues; 
 	}
 	
-	private void getTableData(ArrayList<Customer> customers){
-		
-		for (Customer c : customers){
-			String [] objects = new String[columnNames.length];
+	public void removeRow (int row) {
+		fireTableRowsDeleted (row, row);
+		custList.remove (row);
+	}
+	
+	public void updateRows (int row, String [] values) {
+		fireTableRowsUpdated (row, row);
+		custList.set(row, values);
+	}
+	
+	private void getTableData (ArrayList <Customer> customers) {
+		for (Customer c : customers) {
+			String [] objects = new String [columnNames.length];
 			
-			objects[0] = String.valueOf(c.getId());
-			objects[1] = c.getFirstName();
-			objects[2] = c.getLastName();
-			objects[3] = c.getAddress();
-			objects[4] = c.getPhoneNum();
+			objects [0] = String.valueOf (c.getId ());
+			objects [1] = c.getFirstName ();
+			objects [2] = c.getLastName ();
+			objects [3] = c.getAddress ();
+			objects [4] = c.getPhoneNum ();
 			
-			custList.add(objects);
+			custList.add (objects);
 			
 		}
 	}

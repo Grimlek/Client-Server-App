@@ -20,7 +20,7 @@ public class AddCustomerDialog extends JDialog {
 
 	public AddCustomerDialog () {
 		
-		setTitle ("");
+		setTitle ("Add Customer");
 		setLayout (new MigLayout ("", "[100:100:200][200:200:200]"));
 		setModalExclusionType (Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
 		setLocation (600, 300);
@@ -62,7 +62,7 @@ public class AddCustomerDialog extends JDialog {
 	    
 	    firstNameLab = new JLabel ("First Name: ");
 	    lastNameLab = new JLabel ("Last Name: ");
-	    addressLab = new JLabel ("Addres: ");
+	    addressLab = new JLabel ("Address: ");
 	    phoneNumLab = new JLabel ("Phone Number: ");
 	    errorLab = new JLabel ("All fields are required to be filled out!");
 	    
@@ -85,14 +85,14 @@ public class AddCustomerDialog extends JDialog {
 					try {
 						client.sendMessage ("Add_Customer");
 
-						client.sendObject (new Customer (0, firstNameTF
-								.getText ().trim (), lastNameTF.getText ()
-								.trim (), addressTF.getText ().trim (),
+						client.sendObject (new Customer (0, 
+								firstNameTF.getText ().trim (),
+								lastNameTF.getText ().trim (),
+								addressTF.getText ().trim (),
 								phoneNumTF.getText ().trim ()));
 
 					} catch (IOException e) {
-						System.out
-								.println ("Error sending new customer to server!");
+						System.out.println ("Error sending new customer to server!");
 					}
 
 				}

@@ -38,55 +38,59 @@ public class ClientNameHandler extends ClientHandler {
 		}
 		
 		do {
-			
+
 			input = inObj.readUTF ();
-			
-		switch (input) {
 
-		case ("Get_Customer_Data"):
-			outObj.writeObject (database.getCustomers ());		
-			outObj.flush ();
-			break;
+			switch (input) {
 
-		case ("Get_Product_Data"):
-			outObj.writeObject (database.getProducts ());
-			outObj.flush ();
-			break;
+			case ("Get_Customer_Data"):
+				outObj.writeObject (database.getCustomers ());
+				outObj.flush ();
+				break;
 
-		case ("Add_Customer"):
-			try {
-				database.addCustomer ( (Customer []) inObj.readObject ());
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace ();
+			case ("Get_Product_Data"):
+				outObj.writeObject (database.getProducts ());
+				outObj.flush ();
+				break;
+
+			case ("Add_Customer"):
+				try {
+					database.addCustomer ( (Customer []) inObj.readObject ());
+				} catch (ClassNotFoundException ex) {
+					ex.printStackTrace();
+				}
+				break;
+
+			case ("Add_Product"):
+				// database.addProduct();
+				break;
+
+			case ("Remove_Customer"):
+				database.removeCustomer (Integer.parseInt (inObj.readUTF ()));
+				break;
+
+			case ("Remove_Product"):
+				database.removeProduct (Integer.parseInt (inObj.readUTF ()));
+				break;
+
+			case ("Edit_Customer"):
+				try {
+					database.updateCustomer ( (String []) inObj.readObject ());
+				} catch (ClassNotFoundException ex) {
+					ex.printStackTrace ();
+				}
+				break;
+
+			case ("Edit_Produt"):
+				database.updateProduct ();
+				break;
+
 			}
-			break;
 
-		case ("Add_Product"):
-			//database.addProduct();
-			break;
-
-		case ("Remove_Customer"):			
-			database.removeCustomer (inObj.read ());
-			break;
-
-		case ("Remove_Product"):
-			database.removeProduct (inObj.read ());
-			break;
-
-		case ("Edit_Customer"):
-			database.updateCustomer();
-			break;
-
-		case ("Edit_Produt"):
-			database.updateProduct();
-			break;
-		
-		} 
-		
 		} while (! (input.equals ("Disconnect")));
-		
+
 		database.close ();
-		
+
 	}
 
 	public static final class Factory implements ClientHandlerFactory {
