@@ -8,8 +8,12 @@ public final class Customer extends Person implements Serializable {
 
 	private final int id;
 
-	public Customer (int id, String firstName, String lastName, String address, String phoneNum){
-		
+	public Customer (int id, 
+			String firstName, 
+			String lastName, 
+			String address, 
+			String phoneNum)
+	{
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;

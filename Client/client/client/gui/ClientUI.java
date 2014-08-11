@@ -1,6 +1,8 @@
 package client.gui;
 
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -20,11 +22,14 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import client.connect.ClientController;
 import client.gui.dialog.AddCustomerDialog;
 import client.gui.dialog.AddProductDialog;
 import client.gui.dialog.EditCustomerDialog;
+import client.gui.dialog.EditProductDialog;
 import client.gui.model.CustomerTableModel;
 import client.gui.model.ProductTableModel;
 import common.Customer;
@@ -36,20 +41,6 @@ public final class ClientUI extends JFrame {
 	private static final long serialVersionUID = 1L;
 
 	private ClientController client;
- 	
-	private JMenuBar menuBar;
-	private JMenu menuFile;
-	private JMenu menuAbout;
-	
-	private BufferedImage logo;
-
-	private JLabel headerLab;
-
-	private JScrollPane scroll;
-
-	private JButton butAdd;
-	private JButton butRemove;
-	private JButton butEdit;
 
 	ClientUI () {
 
@@ -60,6 +51,10 @@ public final class ClientUI extends JFrame {
 
 	public void initComponents () {
 
+		final JMenuBar menuBar;
+		final JMenu menuFile;
+		final JMenu menuAbout;
+		
 		new JFrame ();
 		setLayout (new MigLayout ());
 		setDefaultCloseOperation (JFrame.DISPOSE_ON_CLOSE);
@@ -99,6 +94,7 @@ public final class ClientUI extends JFrame {
 
 		private JLabel welcome;
 		private JLabel picLab;
+		private BufferedImage logo;
 
 		StartPanel () {
 
@@ -119,7 +115,7 @@ public final class ClientUI extends JFrame {
 				System.out.println("Image didn't load!");
 			}		
 			
-			picLab = new JLabel (new ImageIcon(logo));
+			picLab = new JLabel (new ImageIcon (logo));
 			
 			add (picLab, "width 536, height 250, wrap");
 
@@ -132,7 +128,7 @@ public final class ClientUI extends JFrame {
 		private static final long serialVersionUID = 1L;
 
 		private final CustomerTableModel custTableModel;
-		
+				
 		private JTable table;
 
 		CustomerPanel () {
@@ -148,37 +144,39 @@ public final class ClientUI extends JFrame {
 		}
 
 		private void initComponents () {
+			
+			final JButton butRemove;
+			final JButton butEdit;
+			final JButton butAdd;
+			final JLabel headerLab;
+			final JScrollPane scroll;
 
 			headerLab = new JLabel ("Customer List: ");
 
 			butAdd = new JButton ("Add");
 			butRemove = new JButton ("Remove");
+			butRemove.setEnabled (false);
 			butEdit = new JButton ("Edit");
+			butEdit.setEnabled (false);
 			
 			butAdd.addActionListener (new ActionListener () {
-
 				@Override
 				public void actionPerformed (java.awt.event.ActionEvent evt) {
-					
-					new AddCustomerDialog ();
-					
+					new AddCustomerDialog ();	
 				}
-				
 			});
 			
 			butRemove.addActionListener (new ActionListener () {
-
 				@Override
 				public void actionPerformed (java.awt.event.ActionEvent evt) {
-					int selectedRow = table.getSelectedRow ();
+					final int selectedRow = table.getSelectedRow ();
 					
-					String [] values = custTableModel.getRowValues (selectedRow);
+					final String [] values = custTableModel.getRowValues (selectedRow);
 					
-					JOptionPane.showConfirmDialog (null, "Are you sure that you want to remove customer?",
+					final int reply = JOptionPane.showConfirmDialog (null, "Are you sure that you want to remove customer?",
 							"Warning", JOptionPane.YES_NO_OPTION);
 					
-						
-						if (JOptionPane.YES_NO_OPTION == JOptionPane.YES_OPTION) {
+						if (reply == JOptionPane.YES_OPTION) {
 					
 							try {
 							
@@ -197,29 +195,45 @@ public final class ClientUI extends JFrame {
 			});
 			
 			butEdit.addActionListener (new ActionListener () {
-
 				@Override
 				public void actionPerformed (java.awt.event.ActionEvent evt) {
 					
-					int selectedRow = table.getSelectedRow ();
+					final int selectedRow = table.getSelectedRow ();
 					
-					String [] values = custTableModel.getRowValues (selectedRow);
+					final String [] values = custTableModel.getRowValues (selectedRow);
 					
-					EditCustomerDialog editDialog = new EditCustomerDialog (values);
+					final EditCustomerDialog editDialog = new EditCustomerDialog (values);
 					
-					custTableModel.updateRows(selectedRow, editDialog.getChangedValues());
+					editDialog.addWindowListener (new WindowAdapter () {
+					    @Override
+					    public void windowClosed (WindowEvent e) {
+					    	custTableModel.updateRow (selectedRow, editDialog.getChangedValues());
+					    }
+					});
 				}
 				
 			});
 
 			add (headerLab, "wrap");
 
-			table = new JTable (custTableModel);
+			table = new JTable (custTableModel);			
 			table.setFillsViewportHeight (true);
 			table.getTableHeader ().setReorderingAllowed (false);
 			
 			table.setSelectionMode (ListSelectionModel.SINGLE_SELECTION);
-			scroll = new JScrollPane (table);
+			table.getSelectionModel ().addListSelectionListener (new ListSelectionListener () {
+				@Override
+				public void valueChanged (ListSelectionEvent e) {
+					int row = table.getSelectedRow ();	
+					System.out.println (row);
+					if (row != -1) {
+						System.out.println ("I am inside the if statement");
+						butEdit.setEnabled (true);
+						butRemove.setEnabled (true);
+					}
+			}});
+			
+			scroll = new JScrollPane (table);			
 			table.getColumnModel ().getColumn (3).setMinWidth (150);
 			table.getColumnModel ().getColumn (4).setMinWidth (100);
 			
@@ -230,7 +244,6 @@ public final class ClientUI extends JFrame {
 			add (butEdit, "sgx");
 
 		}
-
 	}
 
 	private class ProductPanel extends JPanel {
@@ -254,6 +267,12 @@ public final class ClientUI extends JFrame {
 		}
 
 		public void initComponents () {
+			
+			final JButton butRemove;
+			final JButton butEdit;
+			final JButton butAdd;
+			final JLabel headerLab;
+			final JScrollPane scroll;
 
 			headerLab = new JLabel ("Product List: ");
 
@@ -262,30 +281,25 @@ public final class ClientUI extends JFrame {
 			butEdit = new JButton ("Edit");
 			
 			butAdd.addActionListener (new ActionListener () {
-
 				@Override
 				public void actionPerformed (java.awt.event.ActionEvent evt) {
-					
-					new AddProductDialog ();
-					
+					new AddProductDialog ();	
 				}
-				
 			});
 
 			butRemove.addActionListener (new ActionListener () {
-
 				@Override
 				public void actionPerformed (java.awt.event.ActionEvent evt) {
 					
-					int selectedRow = table.getSelectedRow ();
+					final int selectedRow = table.getSelectedRow ();
 					
-					String [] values = prodTableModel.getRowValues (selectedRow);
+					final String [] values = prodTableModel.getRowValues (selectedRow);
 					
-					JOptionPane.showConfirmDialog (null, "Are you sure that you want to remove this product?",
+					final int reply = JOptionPane.showConfirmDialog (null, "Are you sure that you want to remove this product?",
 							"Warning", JOptionPane.YES_NO_OPTION);
 					
 						
-						if (JOptionPane.YES_NO_OPTION == JOptionPane.YES_OPTION) {
+						if (reply == JOptionPane.YES_OPTION) {
 					
 							try {
 							
@@ -296,22 +310,29 @@ public final class ClientUI extends JFrame {
 							prodTableModel.removeRow (selectedRow);
 							
 							} catch (IOException ex) {
-								System.out.println("Error sending the selected product" 
+								System.out.println ("Error sending the selected product" 
 										+ " to remove from the client to server!");
-							}		
+							}
 						}
 				}
 			});
 			
-			butEdit.addActionListener (new ActionListener() {
-
+			butEdit.addActionListener (new ActionListener () {
 				@Override
 				public void actionPerformed (java.awt.event.ActionEvent evt) {
 					
-					System.out.println ("sup");
+					final int selectedRow = table.getSelectedRow ();
+					final String [] values = prodTableModel.getRowValues (selectedRow);
 					
+					final EditProductDialog editDialog = new EditProductDialog (values);
+					
+					editDialog.addWindowListener (new WindowAdapter () {
+					    @Override
+					    public void windowClosed (WindowEvent e) {
+					    	prodTableModel.updateRow (selectedRow, editDialog.getChangedValues());
+					    }
+					});
 				}
-				
 			});
 
 			table = new JTable (prodTableModel);
@@ -331,18 +352,12 @@ public final class ClientUI extends JFrame {
 			add (butEdit, "sgx");
 
 		}
-
 	}
-
-	
-	
 	public static void main (String [] args) {
-
 		SwingUtilities.invokeLater (new Runnable () {
 			public void run () {
 				new ClientUI ();
 			}
 		});
 	}
-
 }

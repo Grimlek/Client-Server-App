@@ -10,6 +10,7 @@ import java.util.concurrent.Executors;
 
 import server.database.MySQLDatabase;
 import common.Customer;
+import common.Product;
 
 public class ClientNameHandler extends ClientHandler {
 
@@ -57,14 +58,18 @@ public class ClientNameHandler extends ClientHandler {
 				try {
 					database.addCustomer ( (Customer []) inObj.readObject ());
 				} catch (ClassNotFoundException ex) {
-					ex.printStackTrace();
+					ex.printStackTrace ();
 				}
 				break;
 
 			case ("Add_Product"):
-				// database.addProduct();
+				try {
+				   database.addProduct ( (Product []) inObj.readObject ());
+				} catch (ClassNotFoundException ex) {
+					ex.printStackTrace ();
+				}
 				break;
-
+				
 			case ("Remove_Customer"):
 				database.removeCustomer (Integer.parseInt (inObj.readUTF ()));
 				break;
@@ -81,10 +86,13 @@ public class ClientNameHandler extends ClientHandler {
 				}
 				break;
 
-			case ("Edit_Produt"):
-				database.updateProduct ();
+			case ("Edit_Product"):
+				try {
+					database.updateProduct ( (String []) inObj.readObject ());
+				} catch (ClassNotFoundException ex) {
+					ex.printStackTrace ();
+				}
 				break;
-
 			}
 
 		} while (! (input.equals ("Disconnect")));

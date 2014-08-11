@@ -20,16 +20,14 @@ public class AddProductDialog extends JDialog {
 
 	public AddProductDialog () {
 		
-		setTitle ("");
+		setTitle ("Add Product");
 		setLayout (new MigLayout ("", "[100:100:200][200:200:200]"));
 		setModalExclusionType (Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
 		setLocation (600, 300);
 		initComponents ();
 		pack ();
-		setVisible (true);
-		
+		setVisible (true);	
 	}
-	
 	
 	public void initComponents () {
 		
@@ -62,6 +60,7 @@ public class AddProductDialog extends JDialog {
 	    errorLab = new JLabel ("All fields are required to be filled out!");
 	    
 	    butAdd = new JButton ("Add");
+	    butCancel = new JButton ("Cancel");
 	    
 		butAdd.addActionListener (new ActionListener () {
 
@@ -79,23 +78,19 @@ public class AddProductDialog extends JDialog {
 					try {
 						client.sendMessage ("Add_Product");
 
-						client.sendObject (new Product (0, productNameTF
-								.getText ().trim (), descriptionTF.getText ()
-								.trim (), Double.parseDouble (priceTF
-								.getText ().trim ())));
+						client.sendObject (new Product (0, 
+								productNameTF.getText ().trim (),
+								descriptionTF.getText ().trim (),
+								Double.parseDouble (priceTF.getText ().trim ())));
 
 					} catch (IOException e) {
-						System.out
-								.println ("Error sending new customer to server!");
+						System.out.println ("Error sending new customer to server!");
 					}
 				}
-
 				dispose ();
 			}
 		});
 		
-	    butCancel = new JButton ("Cancel");	 
-	    
 		butCancel.addActionListener (new ActionListener() {
 			@Override
 			public void actionPerformed (java.awt.event.ActionEvent evt) {
@@ -114,10 +109,6 @@ public class AddProductDialog extends JDialog {
 	    add (priceLab);
 	    add (priceTF, "width 100, wrap");
 	    add (butAdd);
-	    add (butCancel);
-	    
-	}
-
-	
+	    add (butCancel);   
+	}	
 }
-

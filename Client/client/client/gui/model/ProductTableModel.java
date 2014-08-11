@@ -43,10 +43,17 @@ public class ProductTableModel extends AbstractTableModel {
 	}
 	
 	public void removeRow (int row) {
-		
-		fireTableRowsDeleted (row, row);
 		prodList.remove (row);
-		
+		fireTableRowsDeleted (row, row);
+	}
+	
+	public void updateRow (int row, String [] values) {
+		for (int i = 0; i < prodList.size(); i++){
+			if (i == row){
+				fireTableRowsUpdated (row, row);
+				prodList.set (row, values);
+			}
+		}
 	}
 
 	private void getTableData (ArrayList <Product> products) {

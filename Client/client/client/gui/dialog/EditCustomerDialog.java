@@ -14,7 +14,7 @@ import javax.swing.event.DocumentListener;
 import net.miginfocom.swing.MigLayout;
 import client.connect.ClientController;
 
-public class EditCustomerDialog extends JDialog implements DocumentListener{
+public class EditCustomerDialog extends JDialog implements DocumentListener {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -28,7 +28,7 @@ public class EditCustomerDialog extends JDialog implements DocumentListener{
 	private final String [] initialValues;
 	
 	public EditCustomerDialog (String [] values) {
-		setTitle ("Edit Custoemr");
+		setTitle ("Edit Customer");
 		setLayout (new MigLayout ("", "[100:100:200][200:200:200]"));
 		setModalExclusionType (Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
 		setLocation (600, 300);
@@ -40,7 +40,7 @@ public class EditCustomerDialog extends JDialog implements DocumentListener{
 		initialValues = values;
 		
 	    butEdit = new JButton ("Edit");
-	    butEdit.setEnabled(false);
+	    butEdit.setEnabled (false);
 		
 		initComponents ();
 		pack ();
@@ -79,7 +79,7 @@ public class EditCustomerDialog extends JDialog implements DocumentListener{
 					try {
 						client.sendMessage ("Edit_Customer");
 						
-						client.sendObject (getChangedValues());
+						client.sendObject (getChangedValues ());
 
 					} catch (IOException e) {
 						System.out.println ("Error sending new customer to server!");
@@ -100,17 +100,14 @@ public class EditCustomerDialog extends JDialog implements DocumentListener{
 	    add (phoneNumTF, "width 100, wrap");
 	    add (butEdit);
 	    add (butCancel);
-	    
 	}
 	
 	public String [] getChangedValues (){
-		
 		String [] values = {initialValues [0], 
 				firstNameTF.getText ().trim (),
 				lastNameTF.getText ().trim (), 
 				addressTF.getText ().trim (),
 				phoneNumTF.getText ().trim ()};
-		
 		return values;
 	}
 	
@@ -129,33 +126,27 @@ public class EditCustomerDialog extends JDialog implements DocumentListener{
 	}
 	
 	public Boolean isDataChanged (){
-		System.out.println("System has entered data changed");
-		
-		if ( (firstNameTF.getText ().trim ().contains (initialValues[0])) || 
+		if ( (firstNameTF.getText ().trim ().compareTo (initialValues [0]) == 0) || 
 				(firstNameTF.getText ().trim ().length () <= 2)) {
-			System.out.println("first name tf");	
 			return false;
 		}
-		if ((lastNameTF.getText ().trim ().contains (initialValues[1])) || 
+		if ( (lastNameTF.getText ().trim ().compareTo (initialValues [1]) == 0) || 
 				(lastNameTF.getText ().trim ().length () <= 2)) {
-			System.out.println("last name tf");
 			return false;
 		}
-		if ((addressTF.getText ().trim ().contains (initialValues[2])) || 
+		if ( (addressTF.getText ().trim ().compareTo (initialValues [2]) == 0) || 
 				(addressTF.getText ().trim ().length () <= 2)) {
-			System.out.println("address tf");
 			return false;
 		}
-		if ((phoneNumTF.getText ().trim ().contains (initialValues[3])) || 
+		if ( (phoneNumTF.getText ().trim ().compareTo (initialValues [3]) == 0) || 
 				(phoneNumTF.getText ().trim ().length () <= 2)) {
-			System.out.println("phone num tf");
 			return false;
 		}
 		return true;		
 	}
 
 	@Override
-	public void removeUpdate(DocumentEvent arg0) {
+	public void removeUpdate (DocumentEvent arg0) {
 		checkData ();
 	}
 	

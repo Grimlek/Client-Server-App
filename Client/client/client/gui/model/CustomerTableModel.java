@@ -2,6 +2,7 @@ package client.gui.model;
 import java.util.ArrayList;
 
 import common.Customer;
+
 import javax.swing.table.AbstractTableModel;
 
 public class CustomerTableModel extends AbstractTableModel {
@@ -12,9 +13,7 @@ public class CustomerTableModel extends AbstractTableModel {
 	private String [] columnNames = {"ID", "First Name", "Last Name", "Address", "Phone"};
 	
 	public CustomerTableModel (ArrayList <Customer> customers) {
-		
-		getTableData (customers);
-		
+		getTableData (customers);	
 	}
 
 	@Override
@@ -43,13 +42,13 @@ public class CustomerTableModel extends AbstractTableModel {
 	}
 	
 	public void removeRow (int row) {
-		fireTableRowsDeleted (row, row);
 		custList.remove (row);
+		fireTableRowsDeleted (row, row);
 	}
 	
-	public void updateRows (int row, String [] values) {
+	public void updateRow (int row, String [] values) {
+		custList.set (row, values);
 		fireTableRowsUpdated (row, row);
-		custList.set(row, values);
 	}
 	
 	private void getTableData (ArrayList <Customer> customers) {
@@ -63,7 +62,6 @@ public class CustomerTableModel extends AbstractTableModel {
 			objects [4] = c.getPhoneNum ();
 			
 			custList.add (objects);
-			
 		}
 	}
 	

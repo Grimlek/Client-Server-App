@@ -26,11 +26,9 @@ public class AddCustomerDialog extends JDialog {
 		setLocation (600, 300);
 		initComponents ();
 		pack ();
-		setVisible (true);
-		
+		setVisible (true);		
 	}
-	
-	
+
 	public void initComponents () {
 		
 		final JTextField firstNameTF;
@@ -67,9 +65,9 @@ public class AddCustomerDialog extends JDialog {
 	    errorLab = new JLabel ("All fields are required to be filled out!");
 	    
 	    butAdd = new JButton ("Add");
+	    butCancel = new JButton ("Cancel");
 	    
 		butAdd.addActionListener (new ActionListener () {
-
 			@Override
 			public void actionPerformed (java.awt.event.ActionEvent evt) {
 
@@ -94,17 +92,18 @@ public class AddCustomerDialog extends JDialog {
 					} catch (IOException e) {
 						System.out.println ("Error sending new customer to server!");
 					}
-
 				}
-
 				dispose ();
-
 			}
-
 		});
 		
-	    butCancel = new JButton ("Cancel");	 
-	    
+		butCancel.addActionListener (new ActionListener () {
+			@Override
+			public void actionPerformed (java.awt.event.ActionEvent evt) {
+				dispose ();
+			}
+		}); 
+	   
 	    errorLab.setForeground (Color.red);
 	    errorLab.setVisible (false);
 	    
@@ -119,9 +118,5 @@ public class AddCustomerDialog extends JDialog {
 	    add (phoneNumTF, "width 100, wrap");
 	    add (butAdd);
 	    add (butCancel);
-	    
-	}
-
-	
+	}	
 }
-
