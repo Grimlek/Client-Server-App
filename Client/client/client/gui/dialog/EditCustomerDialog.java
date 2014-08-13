@@ -1,6 +1,5 @@
 package client.gui.dialog;
 
-import java.awt.Dialog;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
@@ -30,7 +29,7 @@ public class EditCustomerDialog extends JDialog implements DocumentListener {
 	public EditCustomerDialog (String [] values) {
 		setTitle ("Edit Customer");
 		setLayout (new MigLayout ("", "[100:100:200][200:200:200]"));
-		setModalExclusionType (Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
+		setModalityType (ModalityType.APPLICATION_MODAL);
 		setLocation (600, 300);
 		
 		firstNameTF = new JTextField (values [1]);

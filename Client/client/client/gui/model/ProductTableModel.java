@@ -13,9 +13,7 @@ public class ProductTableModel extends AbstractTableModel {
 	private String [] columnNames = { "Product ID", "Product Name", "Description", "Price" };
 
 	public ProductTableModel (ArrayList <Product> products) {
-
 		getTableData (products);
-
 	}
 
 	@Override
@@ -69,7 +67,5 @@ public class ProductTableModel extends AbstractTableModel {
 			prodList.add (objects);
 
 		}
-
 	}
-	
 }

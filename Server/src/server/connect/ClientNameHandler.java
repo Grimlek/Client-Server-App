@@ -39,7 +39,6 @@ public class ClientNameHandler extends ClientHandler {
 		}
 		
 		do {
-
 			input = inObj.readUTF ();
 
 			switch (input) {
@@ -96,7 +95,7 @@ public class ClientNameHandler extends ClientHandler {
 			}
 
 		} while (! (input.equals ("Disconnect")));
-
+		
 		database.close ();
 
 	}

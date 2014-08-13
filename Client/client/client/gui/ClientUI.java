@@ -1,6 +1,9 @@
 package client.gui;
 
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
@@ -15,6 +18,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -43,7 +47,7 @@ public final class ClientUI extends JFrame {
 	private ClientController client;
 
 	ClientUI () {
-
+		
 		client = new ClientController ();
 
 		initComponents ();
@@ -54,15 +58,56 @@ public final class ClientUI extends JFrame {
 		final JMenuBar menuBar;
 		final JMenu menuFile;
 		final JMenu menuAbout;
+		final JMenuItem menuClose;
 		
 		new JFrame ();
 		setLayout (new MigLayout ());
-		setDefaultCloseOperation (JFrame.DISPOSE_ON_CLOSE);
+		
+		addWindowListener (new WindowAdapter () {
+		    public void windowClosing (WindowEvent e) {
+		    	try {
+					client.sendMessage ("Disconnect");
+					setDefaultCloseOperation (JFrame.DISPOSE_ON_CLOSE);
+				} catch (IOException ex) {
+					ex.printStackTrace ();
+				}
+		    }});
 
 		menuBar = new JMenuBar ();
+		menuClose = new JMenuItem ("Close");
 		menuFile = new JMenu ("File");
 		menuAbout = new JMenu ("About");
-
+		
+		menuClose.addActionListener (new ActionListener () {
+			@Override
+			public void actionPerformed (ActionEvent arg0) {
+				try {
+					client.sendMessage("Disconnect");
+					dispose ();	
+				} catch (IOException ex) {
+					ex.printStackTrace();
+				}
+			}
+		});
+		
+		menuAbout.addMouseListener (new MouseListener () {
+			@Override
+			public void mouseClicked (MouseEvent arg0) {
+				JOptionPane.showMessageDialog (null, "Server Tec Software System\n" +
+						"Written By: Charles A. Sexton Jr.\n" +
+						"Version: 2.4");
+			}
+			@Override
+			public void mouseEntered (MouseEvent arg0) { }
+			@Override
+			public void mouseExited (MouseEvent arg0) { }
+			@Override
+			public void mousePressed (MouseEvent arg0) { }
+			@Override
+			public void mouseReleased (MouseEvent arg0) { }			
+		});
+				
+		menuFile.add (menuClose);
 		menuBar.add (menuFile);
 		menuBar.add (menuAbout);
 		
@@ -72,7 +117,6 @@ public final class ClientUI extends JFrame {
 		pack ();
 		setLocationRelativeTo (null);
 		setVisible (true);
-
 	}
 
 	private class TabPanel extends JTabbedPane {
@@ -80,12 +124,11 @@ public final class ClientUI extends JFrame {
 		private static final long serialVersionUID = 1L;
 
 		TabPanel () {
-
+			
 			addTab ("Start Page", new StartPanel ());
 			addTab ("Customer", new CustomerPanel ());
 			addTab ("Product", new ProductPanel ());
 		}
-
 	}
 
 	private class StartPanel extends JPanel {
@@ -97,7 +140,7 @@ public final class ClientUI extends JFrame {
 		private BufferedImage logo;
 
 		StartPanel () {
-
+			
 			setLayout (new MigLayout ());
 
 			initComponents ();
@@ -110,7 +153,8 @@ public final class ClientUI extends JFrame {
 			welcome = new JLabel ("This product is currently in AlphaBeta");
 			
 			try {
-				logo = ImageIO.read (new File ("C:/Users/Charles/Desktop/Eclipse Workspace/ServerTec.png"));
+				logo = ImageIO.read (new File (
+						"C:/Users/Charles/Desktop/Eclipse Workspace/ServerTec.png"));
 			} catch (IOException ex) {
 				System.out.println("Image didn't load!");
 			}		
@@ -118,9 +162,7 @@ public final class ClientUI extends JFrame {
 			picLab = new JLabel (new ImageIcon (logo));
 			
 			add (picLab, "width 536, height 250, wrap");
-
 		}
-
 	}
 
 	private class CustomerPanel extends JPanel {
@@ -140,7 +182,6 @@ public final class ClientUI extends JFrame {
 							.receiveObject ("Get_Customer_Data"));
 
 			initComponents ();
-
 		}
 
 		private void initComponents () {
@@ -211,7 +252,6 @@ public final class ClientUI extends JFrame {
 					    }
 					});
 				}
-				
 			});
 
 			add (headerLab, "wrap");
@@ -224,10 +264,8 @@ public final class ClientUI extends JFrame {
 			table.getSelectionModel ().addListSelectionListener (new ListSelectionListener () {
 				@Override
 				public void valueChanged (ListSelectionEvent e) {
-					int row = table.getSelectedRow ();	
-					System.out.println (row);
+					int row = table.getSelectedRow ();
 					if (row != -1) {
-						System.out.println ("I am inside the if statement");
 						butEdit.setEnabled (true);
 						butRemove.setEnabled (true);
 					}
@@ -242,7 +280,6 @@ public final class ClientUI extends JFrame {
 			add (butAdd, "split 3, flowy, top, sgx");
 			add (butRemove, "sgx");
 			add (butEdit, "sgx");
-
 		}
 	}
 
@@ -278,7 +315,9 @@ public final class ClientUI extends JFrame {
 
 			butAdd = new JButton ("Add");
 			butRemove = new JButton ("Remove");
+			butRemove.setEnabled(false);
 			butEdit = new JButton ("Edit");
+			butEdit.setEnabled(false);
 			
 			butAdd.addActionListener (new ActionListener () {
 				@Override
@@ -295,7 +334,8 @@ public final class ClientUI extends JFrame {
 					
 					final String [] values = prodTableModel.getRowValues (selectedRow);
 					
-					final int reply = JOptionPane.showConfirmDialog (null, "Are you sure that you want to remove this product?",
+					final int reply = JOptionPane.showConfirmDialog (null,
+							"Are you sure that you want to remove this product?",
 							"Warning", JOptionPane.YES_NO_OPTION);
 					
 						
@@ -322,6 +362,7 @@ public final class ClientUI extends JFrame {
 				public void actionPerformed (java.awt.event.ActionEvent evt) {
 					
 					final int selectedRow = table.getSelectedRow ();
+					
 					final String [] values = prodTableModel.getRowValues (selectedRow);
 					
 					final EditProductDialog editDialog = new EditProductDialog (values);
@@ -341,8 +382,17 @@ public final class ClientUI extends JFrame {
 			table.getColumnModel ().getColumn (1).setMinWidth (150);
 			table.getColumnModel ().getColumn (2).setMinWidth (125);
 			
-			// This is setting user selection to a single interval.
 			table.setSelectionMode (ListSelectionModel.SINGLE_SELECTION);
+			table.getSelectionModel ().addListSelectionListener (new ListSelectionListener () {
+				@Override
+				public void valueChanged (ListSelectionEvent e) {
+					int row = table.getSelectedRow ();
+					if (row != -1) {
+						butEdit.setEnabled (true);
+						butRemove.setEnabled (true);
+					}
+			}});
+			
 			scroll = new JScrollPane (table);
 
 			add (headerLab, "wrap");
@@ -350,9 +400,9 @@ public final class ClientUI extends JFrame {
 			add (butAdd, "split 3, flowy, top, sgx");
 			add (butRemove, "sgx");
 			add (butEdit, "sgx");
-
 		}
 	}
+	
 	public static void main (String [] args) {
 		SwingUtilities.invokeLater (new Runnable () {
 			public void run () {

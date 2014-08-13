@@ -64,5 +64,4 @@ public class CustomerTableModel extends AbstractTableModel {
 			custList.add (objects);
 		}
 	}
-	
 }
