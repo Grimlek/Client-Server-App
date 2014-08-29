@@ -1,8 +1,7 @@
 package client.gui.model;
+
 import java.util.ArrayList;
-
 import common.Customer;
-
 import javax.swing.table.AbstractTableModel;
 
 public class CustomerTableModel extends AbstractTableModel {
@@ -53,15 +52,15 @@ public class CustomerTableModel extends AbstractTableModel {
 	
 	private void getTableData (ArrayList <Customer> customers) {
 		for (Customer c : customers) {
-			String [] objects = new String [columnNames.length];
+			String [] data = new String [columnNames.length];
 			
-			objects [0] = String.valueOf (c.getId ());
-			objects [1] = c.getFirstName ();
-			objects [2] = c.getLastName ();
-			objects [3] = c.getAddress ();
-			objects [4] = c.getPhoneNum ();
+			data [0] = String.valueOf (c.getId ());
+			data [1] = c.getFirstName ();
+			data [2] = c.getLastName ();
+			data [3] = c.getAddress ();
+			data [4] = c.getPhoneNum ();
 			
-			custList.add (objects);
+			custList.add (data);
 		}
 	}
 }

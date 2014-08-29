@@ -8,7 +8,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -32,7 +31,8 @@ import client.gui.dialog.AddCustomerDialog;
 import client.gui.dialog.AddProductDialog;
 import client.gui.dialog.EditCustomerDialog;
 import client.gui.dialog.EditProductDialog;
-import client.gui.dialog.searchCustDialog;
+import client.gui.dialog.SearchCustDialog;
+import client.gui.dialog.SearchProdDialog;
 import client.gui.model.CustomerTableModel;
 import client.gui.model.ProductTableModel;
 import common.Customer;
@@ -69,7 +69,7 @@ public final class ClientUI extends JFrame {
 		addWindowListener (new WindowAdapter () {
 		    public void windowClosing (WindowEvent e) {
 		    	try {
-					client.sendMessage ("Disconnect");
+					client.closeConnection();
 					setDefaultCloseOperation (JFrame.DISPOSE_ON_CLOSE);
 				} catch (IOException ex) {
 					ex.printStackTrace ();
@@ -89,7 +89,7 @@ public final class ClientUI extends JFrame {
 			@Override
 			public void actionPerformed (ActionEvent arg0) {
 				try {
-					client.sendMessage("Disconnect");
+					client.closeConnection();
 					dispose ();	
 				} catch (IOException ex) {
 					ex.printStackTrace ();
@@ -108,15 +108,15 @@ public final class ClientUI extends JFrame {
 		
 		menuCustomer.addActionListener (new ActionListener () {			
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				new searchCustDialog ();
+			public void actionPerformed (ActionEvent arg0) {
+				new SearchCustDialog ();
 			}
 		});
 		
 		menuProduct.addActionListener (new ActionListener () {			
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				
+			public void actionPerformed (ActionEvent e) {
+				new SearchProdDialog ();
 			}
 		});
 				
@@ -141,10 +141,13 @@ public final class ClientUI extends JFrame {
 		private static final long serialVersionUID = 1L;
 
 		TabPanel () {
-			
-			addTab ("Start Page", new StartPanel ());
-			addTab ("Customer", new CustomerPanel ());
-			addTab ("Product", new ProductPanel ());
+			try {
+				addTab ("Start Page", new StartPanel ());
+				addTab ("Customer", new CustomerPanel ());
+				addTab ("Product", new ProductPanel ());
+			} catch (ClassNotFoundException | IOException e) {
+				e.printStackTrace ();
+			}
 		}
 	}
 
@@ -152,7 +155,6 @@ public final class ClientUI extends JFrame {
 
 		private static final long serialVersionUID = 1L;
 
-		private JLabel welcome;
 		private JLabel picLab;
 		private BufferedImage logo;
 
@@ -161,14 +163,9 @@ public final class ClientUI extends JFrame {
 			setLayout (new MigLayout ());
 
 			initComponents ();
-
-			add (welcome);
 		}
 
-		public void initComponents () {
-
-			welcome = new JLabel ("This product is currently in AlphaBeta");
-			
+		public void initComponents () {			
 			try {
 				logo = ImageIO.read (new File (
 						"C:/Users/Charles/Desktop/Eclipse Workspace/ServerTec.png"));
@@ -178,7 +175,7 @@ public final class ClientUI extends JFrame {
 			
 			picLab = new JLabel (new ImageIcon (logo));
 			
-			add (picLab, "width 536, height 250, wrap");
+			add (picLab, "width 536, height 400, wrap");
 		}
 	}
 
@@ -190,13 +187,15 @@ public final class ClientUI extends JFrame {
 				
 		private JTable table;
 
-		CustomerPanel () {
+		CustomerPanel () throws IOException, ClassNotFoundException {
 
 			setLayout (new MigLayout ());
 
+			client.sendMessage ("Get_Customer_Data");
+			
 			custTableModel = new CustomerTableModel (
-					(ArrayList<Customer>) client
-							.receiveObject ("Get_Customer_Data"));
+					(ArrayList <Customer>) client
+							.readObject ());
 
 			initComponents ();
 		}
@@ -308,13 +307,14 @@ public final class ClientUI extends JFrame {
 
 		private final ProductTableModel prodTableModel;
 
-		ProductPanel () {
+		ProductPanel () throws IOException, ClassNotFoundException {
 
 			setLayout (new MigLayout ());
 
+			client.sendMessage("Get_Product_Data");
+			
 			prodTableModel = new ProductTableModel (
-					(ArrayList<Product>) client
-							.receiveObject ("Get_Product_Data"));
+					(ArrayList <Product>) client.readObject ());
 
 			initComponents ();
 

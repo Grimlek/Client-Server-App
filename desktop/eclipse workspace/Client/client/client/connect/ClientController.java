@@ -14,96 +14,66 @@ public class ClientController {
 	private ObjectInputStream inObj;
 	private Socket socket;
 
-	public ClientController() {
-
-		this.connect(hostName, port);
-		this.outputStream();
-		this.inputStream();
-
+	public ClientController () {
+		this.connect (hostName, port);
+		this.createOutputStream ();
+		this.createInputStream ();
 	}
 
-	private void connect(String hostName, int port) {
-
+	private void connect (String hostName, int port) {
 		try {
-			socket = new Socket(hostName, port);
+			socket = new Socket (hostName, port);
 		} catch (IOException ex) {
-			System.out.println("Host was not found: " + hostName);
+			System.err.println ("Host was not found: " + hostName);
 		} 
 	}
 
-	private void outputStream() {
-
+	private void createOutputStream () {
 		try {
-			outObj = new ObjectOutputStream(socket.getOutputStream());
+			outObj = new ObjectOutputStream (socket.getOutputStream ());
 		} catch (IOException ex) {
-			System.out.println("Object output stream failure");
-
+			System.err.println ("Object output stream failure");
 		}
 	}
 
-	private void inputStream() {
-
+	private void createInputStream () {
 		try {
-			inObj = new ObjectInputStream(socket.getInputStream());
+			inObj = new ObjectInputStream (socket.getInputStream ());
 		} catch (IOException ex) {
-			System.out.println("Object input stream failure");
+			System.err.println ("Object input stream failure");
 		}
-
 	}
 
-	public void closeConnection() throws IOException {
-
+	public void closeConnection () throws IOException {
 		try {
-			this.sendMessage("Client_Close");
+			this.sendMessage ("Disconnect");
 		}
-
 		finally {
-
 			try {
-				outObj.close();
+				outObj.close ();
 			}
-
 			finally {
 				try {
-					inObj.close();
+					inObj.close ();
 				}
-
 				finally {
-					socket.close();
+					socket.close ();
 				}
 			}
 		}
 	}
 
-	public void sendMessage(String message) throws IOException {
-			outObj.writeUTF(message);
-			outObj.flush();
-
+	public void sendMessage (String message) throws IOException {
+			outObj.writeUTF (message);
+			outObj.flush ();
 	}
 	
-	public void sendObject(Object object) throws IOException {
-		outObj.writeObject(object);
-		outObj.flush();
+	public void sendObject (Object object) throws IOException {
+			outObj.writeObject (object);
+			outObj.flush ();
 	}
 	
-	public Object receiveObject(String message) {
-
-		Object input = null;
-		
-		try {
-			sendMessage(message);
-		} catch (IOException ex) {
-			System.out.println("Error sending the message to the server while trying to receive the object.");
-			ex.printStackTrace();
-		}
-		
-		try {
-			input = inObj.readObject();
-		} catch (IOException | ClassNotFoundException ex) {
-			System.out.println("Error receving the object from the server ");
-		}
-
-		return input;
-
+	public Object readObject () throws ClassNotFoundException, IOException {
+		return inObj.readObject ();
 	}
 }

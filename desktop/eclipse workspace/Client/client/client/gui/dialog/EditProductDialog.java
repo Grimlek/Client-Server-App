@@ -94,7 +94,7 @@ public class EditProductDialog extends JDialog implements DocumentListener {
 	    
 	}
 	
-	public String [] getChangedValues (){
+	public String [] getChangedValues () {
 		
 		String [] values = {initialValues [0], 
 				productNameTF.getText ().trim (),
@@ -104,7 +104,7 @@ public class EditProductDialog extends JDialog implements DocumentListener {
 		return values;
 	}
 	
-	public void addDocumentListener (JTextField textField){
+	public void addDocumentListener (JTextField textField) {
 		textField.getDocument ().addDocumentListener (this);
 	}
 
@@ -118,7 +118,7 @@ public class EditProductDialog extends JDialog implements DocumentListener {
 		checkData ();
 	}
 	
-	public Boolean isDataChanged (){
+	public Boolean isDataChanged () {
 		
 		if ( (productNameTF.getText ().trim ().compareTo (initialValues [0]) == 0) || 
 				(productNameTF.getText ().trim ().length () <= 2)) {

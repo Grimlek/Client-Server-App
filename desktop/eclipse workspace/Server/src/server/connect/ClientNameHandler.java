@@ -23,7 +23,6 @@ public class ClientNameHandler extends ClientHandler {
 
 		this.outObj = new ObjectOutputStream (socket.getOutputStream ());
 		this.inObj = new ObjectInputStream (socket.getInputStream ());
-
 	}
 
 	@Override
@@ -92,12 +91,19 @@ public class ClientNameHandler extends ClientHandler {
 					ex.printStackTrace ();
 				}
 				break;
+				
+			case ("Search_Customer"):
+				outObj.writeObject (database.searchCustomers (inObj.readUTF ()));
+				break;
+				
+			case ("Search_Product"):
+				outObj.writeObject (database.searchProducts (inObj.readUTF ()));
+				break;
 			}
 
 		} while (! (input.equals ("Disconnect")));
 		
 		database.close ();
-
 	}
 
 	public static final class Factory implements ClientHandlerFactory {
@@ -106,7 +112,6 @@ public class ClientNameHandler extends ClientHandler {
 		public ClientHandler createHandler (Socket socket) throws IOException {
 			return new ClientNameHandler (socket);
 		}
-
 	}
 
 	public static void main (String... args) throws Exception {
@@ -115,6 +120,5 @@ public class ClientNameHandler extends ClientHandler {
 		Server server = new Server (20999, new ClientNameHandler.Factory (), executor);
 
 		server.start ();
-
 	}
 }

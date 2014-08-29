@@ -11,7 +11,7 @@ public final class Product implements Serializable {
 	private final String description;
 	private final double price;
 
-	public Product (int id, String productName, String description, Double price){
+	public Product (int id, String productName, String description, double price){
 		
 		this.id = id;
 		this.productName = productName;

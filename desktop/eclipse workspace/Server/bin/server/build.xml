@@ -1,0 +1,6 @@
+<?xml version="1.0" ?>
+<project name="Server" default="Server">
+  <target name="Server" description="Create Jar file">
+        <jar jarfile="Server.jar" basedir="." includes="*.class" />
+  </target>
+</project>

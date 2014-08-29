@@ -1,8 +1,7 @@
 package client.gui.model;
+
 import java.util.ArrayList;
-
 import javax.swing.table.AbstractTableModel;
-
 import common.Product;
 
 public class ProductTableModel extends AbstractTableModel {

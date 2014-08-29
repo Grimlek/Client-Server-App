@@ -28,7 +28,6 @@ public final class Server {
 	}
 
 	public void start () {
-
 		executor.submit (new Runnable () {
 			@Override
 			public void run () {
@@ -42,20 +41,15 @@ public final class Server {
 				}
 			}
 		});
-
 	}
 
 	public void listen () throws IOException {
-
 		synchronized (this) {
-
 			if (listening) {
 
 				throw new IllegalStateException ("The server has already started listening");
 			}
-
 			listening = true;
-
 		}
 
 		try {
@@ -64,13 +58,9 @@ public final class Server {
 				socket = serverSocket.accept ();
 
 				executor.submit (new Runnable () {
-
 					public void run () {
-						
 							delegateToHandler (socket);
-
 					}
-
 				});
 			}
 		}
@@ -81,11 +71,9 @@ public final class Server {
 			else
 				throw ex;
 		}
-
 	}
 
 	private void delegateToHandler (Socket socket) {
-
 		try {
 			handlerFactory.createHandler (socket).handle ();
 		} catch (IOException | SQLException ex) {
@@ -94,28 +82,21 @@ public final class Server {
 			
 			ex.printStackTrace();
 		}
-
 		finally {
 			try {
-
 				socket.close ();
-
 			} catch (IOException ex) {
-
 				System.out.println ("Exception occured while trying to close the connection to "
 								+ socket.getInetAddress());
-
 			}
 		}
 	}
 
 	public void close () throws IOException {
-
 		if (!closed) {
 			closed = true;
 			serverSocket.close ();
 			executor.shutdown ();
-
 		}
 	}
 }

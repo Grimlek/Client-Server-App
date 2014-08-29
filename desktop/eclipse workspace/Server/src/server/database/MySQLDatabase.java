@@ -131,14 +131,44 @@ public class MySQLDatabase {
 		return productData;
 	}
 	
-	public void searchCustomers () {
-		
-		
+	public ArrayList <Customer> searchCustomers (String search) throws SQLException {
+		ArrayList <Customer> customer = new ArrayList <Customer> ();
+
+			String statement = "SELECT * FROM customers WHERE customerID =?";
+			
+	        preparedStatement = connect.prepareStatement (statement);
+	        preparedStatement.setObject (1, search);
+	        
+			ResultSet resultSet = preparedStatement.executeQuery ();
+				
+				while (resultSet.next ()) {
+					customer.add(new Customer (
+							resultSet.getInt ("customerID"),
+							resultSet.getString ("firstName"),
+							resultSet.getString ("lastName"),
+							resultSet.getString ("address"),
+							resultSet.getString ("phoneNum")));
+				}
+				return customer;
 	}
 	
-	public void searchProducts () {
+	public ArrayList <Product> searchProducts (String search) throws SQLException {
+		ArrayList <Product> product = new ArrayList <Product> ();
+		String statement = "SELECT * FROM products WHERE productID =?";
 		
-		
+        preparedStatement = connect.prepareStatement (statement);
+        preparedStatement.setObject (1, search);
+        
+		ResultSet resultSet = preparedStatement.executeQuery ();
+			
+			while (resultSet.next ()) {
+				product.add(new Product (
+						resultSet.getInt ("productID"),
+						resultSet.getString ("productName"),
+						resultSet.getString ("description"),
+						resultSet.getDouble ("price")));
+			}
+			return product;
 	}
 	
 	public void close () throws SQLException {
