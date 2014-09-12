@@ -1,6 +1,0 @@
-<?xml version="1.0" ?>
-<project name="Client" default="Client">
-  <target name="Client" description="Create Jar file">
-        <jar jarfile="Client.jar" basedir="." includes="*.class" />
-  </target>
-</project>
